@@ -1,0 +1,93 @@
+Krav för G:
+• De beställningar som är märkta med OBL ska vara implementerade.
+• Samtliga medlemmar som redovisar uppgiften ska ha deltagit i grupparbetet.
+• Samtliga gruppmedlemmar som redovisar uppgiften ska ha checkat in kod i ert
+projekts repo på gitHub.
+• Samtliga gruppmedlemmar som redovisar uppgiften ska ha tagit lappar på
+ScrumBoarden och jobbat med dem.
+• Samtliga gruppmedlemmar som redovisar uppgiften måste förstå all kod i ert
+projekt.
+
+Startläge
+Börja med att bygga en enkelt client-server-applikation där en klient kopplar upp sig mot en
+server. Klienten laddar sedan ner en fråga med 4 svarsalternativ från servern. Användaren
+svarar på frågan i klientapplikationen och får feedback om svaret är rätt eller fel. Pusha upp
+koden till ett eget repo på GitHub dit samtliga i gruppen har collaborator-access. Denna
+applikationer ska sedan successivt byggas ut för att bli så lika den ”riktiga” Quizkampen
+som möjligt.
+
+Backlog
+Det ska vara minst 4 frågor per spel.(OBL)
+
+Frågorna ska vara indelade i olika ämneskategorier. (OBL)
+
+Frågorna i spelet ska vara uppdelade i ronder med initialt 2 frågor/rond så att vi sammanlagt
+har 2 ronder/spel och sammanlagt 4 frågor/spel. (OBL)
+
+Det ska gå att ställa in hur många frågor som ska finnas i en rond och hur många ronder som
+ska ingå i ett spel, via en Properties-fil. (OBL)
+
+De frågor som ingår i samma rond ska tillhöra samma kategori. (OBL)
+
+Programmet ska hålla reda på antal poäng som en användare har per rond. (OBL)
+
+En användare ska kunna ansöka om att få spela från klienten (kan ske implicit när klienten
+startas). När servern har mottagit ”spelansökningar” från två olika klienter sätts ett spel
+igång och dessa två användare får spela mot varandra. Alternativt, när en spelare ansluter
+börjar hens spel och hen får svara på den första rundan frågor tills vidare, när nästa spelare
+ansluter blir hen inkopplad i det påbörjade spelet och får göra frågorna i rond 1. (se ”Spel
+mot slumpad spelare” i riktiga Quizkampen) (OBL)
+
+Man ska kunna vara två spelare per spel som spelar mot varandra och turas om att svara på
+frågorna i en rond på ett koordinerat sätt. (OBL)
+
+Klientapplikationen ska ha ett grafiskt interface där varje fråga och de fyra svarsalternativen
+visas. Svarsalternativen visas på var sin knapp. När användaren trycker på en knapp ska den
+byta färg och för att markera om användaren svarade rätt eller fel. GUI:t måste inte likna
+den riktiga Quizkampen, ni har konstnärlig frihet att låta appen se hur hur ni vill (OBL)
+
+Godtyckligt antal spelare ska kunna spela parallellt, två och två. (OBL)
+
+När en användare börjar spela i en rond ska användarens resultat för ronden vara dolt för
+motståndaren tills motståndaren också har svarat. (OBL)
+
+När en användares motståndare börjar spela i en rond ska motståndarens resultat för
+ronden vara dolt för användaren tills användaren har svarat klart. (OBL)
+
+När ett spel avslutas ska bägge spelare kunna se resultat för bägge spelare. (OBL)
+
+När bägge spelare har spelat en rond ska bägge spelare få se bägge spelares resultat för
+ronden. (OBL)
+
+När bägge spelare har spelat en rond ska bägge spelare få se bägge spelares resultat för
+denna rond och för tidigare spelade ronder i detta spel. (OBL)
+
+Det ska finnas en ”Ge Upp”-knapp som avbryter en användares spel (jmf. den vita flaggan
+längst upp till höger i riktiga Qiuz-kampen).
+
+
+Det ska finnas en tidsgräns för hur länge det fåt ta att svara på varje fråga. När denna
+tidsgräns har överskridits räknas det som om användaren har svarat fel.
+
+En användare ska kunna ändra bakgrundsfärg på klientappen.
+
+Varje användare ska kunna välja mellan några olika avatarer, spelarens avatar visas under
+spelets gång.
+
+När en spelare spelar mot en motståndare ska bägges avatarer visas i klientappen.
+
+En användare ska kunna registrera sig från klienten. (Det räcker att skriva in sitt
+användarnamn i en textruta, sedan kan detta namn mappas mot eventuellt sparat
+användardata på serversidan, ingen lösenordshantering behövs om ni inte gärna vill
+implementera detta).
+
+En användare ska kunna ansöka om att få spela mot en annan, registrerad, spelare genom
+att ange den spelarens namn.
+
+Programmet ska spara användarstatistik om varje spelare, hur många rätt och fel hen har.
+En spelare ska inte få samma frågor flera gånger (under rimliga former, spelar man jätteofta
+är det ok att frågorna återkommer, men inte förrän alla frågor har ”gjorts”).
+
+Det ska, i klientappen, gå att titta på en topplista över alla spelares resultat.
+
+De två spelare som spelar ska kunna chatta med varandra.
