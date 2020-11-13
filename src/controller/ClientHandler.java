@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * Created by Emil Johansson
@@ -19,6 +20,8 @@ public class ClientHandler {
 
     private String username;
     private String opponentsName;
+
+    private ObjectOutputStream outputStream;
 
     private Thread sendToServerThread;
     private Thread receiveFromServerThread;
@@ -47,6 +50,7 @@ public class ClientHandler {
     private void connectSocket() {
         try {
             socket = new Socket(ip, port);
+            outputStream = new ObjectOutputStream(socket.getOutputStream());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -57,8 +61,7 @@ public class ClientHandler {
         if (socket != null)
             sendToServerThread = new Thread(() -> {
                 try {
-                    ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-                    out.writeObject(output);
+                    outputStream.writeObject(output);
                     System.out.println("Skickar: " + output.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -67,10 +70,15 @@ public class ClientHandler {
         sendToServerThread.start();
     }
 
+
     public static void main(String[] args) {
         ClientHandler ch = new ClientHandler();
         ch.connectToServer();
-        ch.sendToServer("emil");
 
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            String s = sc.nextLine();
+            ch.sendToServer(s);
+        }
     }
 }
