@@ -1,5 +1,6 @@
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -12,8 +13,8 @@ public class QuestionGenerator implements Serializable {
     List<Category> categoryList = new ArrayList<>();
 
 
-
-    private void addCategories(){
+    // answer1 är det korrekta svaret.
+    private void addCategories() {
         Category djurOchNatur = new Category("Djur och Natur");
         categoryList.add(djurOchNatur);
         djurOchNatur.addQuestion(new Question("Vad är \"Vermisporium\" ett släkte av?",
@@ -40,40 +41,73 @@ public class QuestionGenerator implements Serializable {
                 "Leopold", "Bach", "Amadeus", "Leonardo"));
         musikOchHits.addQuestion(new Question("Metalbandet Bathory sägs vara det band som skapade subgenren " +
                 "'Black Metal'. Men vilken svensk filmregissör har varit med i bandet?",
-                "Jonas Åkerlund", "JOhan Brisinger", "Lukas Moodyson", "Tomas Alfredson"));
+                "Jonas Åkerlund", "Johan Brisinger", "Lukas Moodyson", "Tomas Alfredson"));
+
+        Category dataOchTVSpel = new Category("Data- och TV-spel");
+        categoryList.add(dataOchTVSpel);
+        dataOchTVSpel.addQuestion(new Question("Vem av följande är INTE en medlem i Koopa-familjen i Super Mario's värld?",
+                "Mandy Koopa", "Ludqig von Koopa", "Bowser Jr", "Lemmy Koopa"));
+        dataOchTVSpel.addQuestion(new Question("Vilket företag står bakom \"Street Fighter\"-serien?",
+                "Capcom", "Tecmo", "Konami", "Namco"));
+        dataOchTVSpel.addQuestion(new Question("Vilken typ av spel är Sonic the Hedgehog 2 som släpptes " +
+                "till Sega Mega Drive 1992?", "Plattformsspel", "Fightingspel", "Strategispel", "Pusselspel"));
+
+        Category bockerOchOrd = new Category("Böcker och ord");
+        categoryList.add(bockerOchOrd);
+        bockerOchOrd.addQuestion(new Question("Vad kallas formen \"rödare\" i förhållande till \"röd\"?",
+                "Komparativ", "Genitiv", "Superlativ", "Dimunitiv"));
+        bockerOchOrd.addQuestion(new Question("Vem skrev \"Flickan i frack\"?",
+                "Hjalmar Bergman", "Viktoria Benedictsson", "Selma Lagerlöf", "Augist Strindberg"));
+        bockerOchOrd.addQuestion(new Question("Vilken av följande böcker är INTE en bok av David Pelzer?",
+                "Pojken med hålet i handen", "Pojken som överlevde", "Pojken som kallades Det",
+                "Pojken som inte fanns"));
     }
 
-    QuestionGenerator(){
+    public List<Category> getShuffledCategories(int amount){
+        List<Category> tempList = new ArrayList<>(categoryList);
+        tempList.remove(0);
+        Collections.shuffle(tempList);
+        List<Category> outList = new ArrayList<>();
+        for (int i = 0; i < amount; i++){
+            outList.add(tempList.get(i));
+        }
+        return outList;
+    }
+
+    QuestionGenerator() {
         addCategories();
     }
+
 }
 
 class Category {
     String categoryName;
     List<Question> questionList = new ArrayList<>();
 
-    Category(String categoryName){
+    Category(String categoryName) {
         this.categoryName = categoryName;
     }
 
-    public void addQuestion(Question question){
+    public void addQuestion(Question question) {
         questionList.add(question);
     }
 
 }
 
-class Question{
+class Question {
     final String questionText;
     final String answer1;
     final String answer2;
     final String answer3;
     final String answer4;
+    final String correctAnswer;
 
-    Question(String questionText, String answer1, String answer2, String answer3, String answer4){
+    Question(String questionText, String answer1, String answer2, String answer3, String answer4) {
         this.questionText = questionText;
         this.answer1 = answer1;
         this.answer2 = answer2;
         this.answer3 = answer3;
         this.answer4 = answer4;
+        correctAnswer = answer1;
     }
 }
