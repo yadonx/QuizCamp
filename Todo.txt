@@ -1,12 +1,17 @@
 Krav för G:
 • De beställningar som är märkta med OBL ska vara implementerade.
+
 • Samtliga medlemmar som redovisar uppgiften ska ha deltagit i grupparbetet.
+
 • Samtliga gruppmedlemmar som redovisar uppgiften ska ha checkat in kod i ert
 projekts repo på gitHub.
+
 • Samtliga gruppmedlemmar som redovisar uppgiften ska ha tagit lappar på
 ScrumBoarden och jobbat med dem.
+
 • Samtliga gruppmedlemmar som redovisar uppgiften måste förstå all kod i ert
-projekt.
+  projekt.
+
 
 Startläge
 Börja med att bygga en enkelt client-server-applikation där en klient kopplar upp sig mot en
@@ -17,6 +22,7 @@ applikationer ska sedan successivt byggas ut för att bli så lika den ”riktig
 som möjligt.
 
 Backlog
+
 Det ska vara minst 4 frågor per spel.(OBL)
 
 Frågorna ska vara indelade i olika ämneskategorier. (OBL)
