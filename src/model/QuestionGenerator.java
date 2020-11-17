@@ -1,3 +1,5 @@
+package model;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -74,51 +76,11 @@ public class QuestionGenerator implements Serializable {
         return outList;
     }
 
-    QuestionGenerator() {
+    public QuestionGenerator() {
         addCategories();
     }
 
 }
 
-class Category {
-    String categoryName;
-    List<Question> questionList = new ArrayList<>();
 
-    Category(String categoryName) {
-        this.categoryName = categoryName;
-    }
 
-    public void addQuestion(Question question) {
-        questionList.add(question);
-    }
-
-    public List<Question> getShuffledQuestions(int amount){
-        List<Question> tempList = new ArrayList<>(questionList);
-        tempList.remove(0);
-        Collections.shuffle(tempList);
-        List<Question> outList = new ArrayList<>();
-        for (int i = 0; i < amount; i++){
-            outList.add(tempList.get(i));
-        }
-        return outList;
-    }
-
-}
-
-class Question {
-    final String questionText;
-    final String answer1;
-    final String answer2;
-    final String answer3;
-    final String answer4;
-    final String correctAnswer;
-
-    Question(String questionText, String answer1, String answer2, String answer3, String answer4) {
-        this.questionText = questionText;
-        this.answer1 = answer1;
-        this.answer2 = answer2;
-        this.answer3 = answer3;
-        this.answer4 = answer4;
-        correctAnswer = answer1;
-    }
-}

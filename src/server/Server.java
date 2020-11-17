@@ -20,6 +20,7 @@ public class Server extends Thread {
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
+    private Game game;
 
     private List<ObjectOutputStream> pair;
 
@@ -36,6 +37,7 @@ public class Server extends Thread {
             in = new ObjectInputStream(socket.getInputStream());
 
             pair.add(out);
+            game = new Game(pair);
             Object input = null;
             while (true) {
                 try {
