@@ -1,22 +1,28 @@
 package controller;
 
+
+
+import view.QuizCampGUI;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.Scanner;
 
+
 /**
  * Created by Emil Johansson
  * Date: 2020-11-13
  * Time: 12:48
  * Project: QuizCamp
- * Package: PACKAGE_NAME
- */
+ * */
 public class ClientHandler {
     private int port = 12345;
     private String ip = "127.0.0.1";
     private Socket socket;
+
+    private QuizCampGUI gui;
 
     private String username;
     private String opponentsName;
@@ -25,6 +31,12 @@ public class ClientHandler {
 
     private Thread sendToServerThread;
     private Thread receiveFromServerThread;
+
+    ClientHandler(){}// temp
+
+    public ClientHandler(QuizCampGUI gui){
+        this.gui = gui;
+    }
 
     public void connectToServer() {
         connectSocket();
@@ -69,6 +81,8 @@ public class ClientHandler {
             });
         sendToServerThread.start();
     }
+
+
 
 
     public static void main(String[] args) {
