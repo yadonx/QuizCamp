@@ -1,9 +1,8 @@
 package server;
 
 import model.Category;
-import model.QuestionGenerator;
+import model.QuestionDatabase;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -15,14 +14,14 @@ import java.util.List;
  */
 public class GameProtocol {
 
-    QuestionGenerator questionGenerator;
+    QuestionDatabase questionDatabase;
     private int currentCategory = 0;
 
     List<Category> categoryList;
 
     GameProtocol(){
-        questionGenerator = new QuestionGenerator();
-        categoryList = questionGenerator.getShuffledCategories(3);//Todo fixa med Properties.
+        questionDatabase = new QuestionDatabase();
+        categoryList = questionDatabase.getShuffledCategories(3);//Todo fixa med Properties.
     }
 
     public Category getCategory(){
