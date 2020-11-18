@@ -16,24 +16,31 @@ import java.awt.*;
  */
 public class QuizCampGUI extends JFrame {
 
-    JButton gameButton1 = new JButton("Button 1");
-    JButton gameButton2 = new JButton("Button 2");
-    JButton gameButton3 = new JButton("Button 3");
-    JButton gameButton4 = new JButton("Button 4");
-    JPanel panel1 = new JPanel();
-    JPanel panel2 = new JPanel();
-    JPanel panel3 = new JPanel();
-    JTextArea textArea = new JTextArea();
+    private JButton gameButton1 = new JButton("Button 1");
+    private JButton gameButton2 = new JButton("Button 2");
+    private JButton gameButton3 = new JButton("Button 3");
+    private JButton gameButton4 = new JButton("Button 4");
+    private JButton startButton = new JButton("Play");
 
-    JTextPane textPane = new JTextPane();
+    private JPanel panel1 = new JPanel();
+    private JPanel panel2 = new JPanel();
+    private JPanel panel3 = new JPanel();
+    private JPanel panel4 = new JPanel();
+    private JPanel panel5 = new JPanel();
 
-    JButton start = new JButton("Play");
+    private JTextPane textPane = new JTextPane();
+
+    private JLabel scoreLabel = new JLabel("Score");
+    private JLabel playerLabel = new JLabel("Player: ");
+    private JLabel opponentLabel = new JLabel("Opponent: ");
+    private JLabel vsLabel = new JLabel("VS");
+
 
 
     public QuizCampGUI(){
         frame();
         ClientHandler clientHandler = new ClientHandler(this);
-        start.addActionListener(e -> {
+        startButton.addActionListener(e -> {
             panel3.removeAll();
             panel3.setLayout(new GridLayout(2,2));
             panel3.add(gameButton1); panel3.add(gameButton2); panel3.add(gameButton3); panel3.add(gameButton4);
@@ -44,29 +51,38 @@ public class QuizCampGUI extends JFrame {
     private void frame(){
         setLayout(new BorderLayout());
         setTitle("Quiz Camp");
-        panel2.setBackground(Color.white);
-        add(panel1, BorderLayout.NORTH);
-        panel1.add(new JLabel("QuizCamp"));
 
+
+        add(panel1, BorderLayout.NORTH);
         add(panel2, BorderLayout.CENTER);
-//        panel2.add(textArea);
+        add(panel3, BorderLayout.SOUTH);
+
+
+        panel1.setLayout(new GridLayout(2,1));
+        panel4.setLayout(new FlowLayout());
+        panel5.setLayout(new FlowLayout());
+
+        panel1.add(panel5);
+        panel1.add(panel4);
+
+        panel5.add(scoreLabel);
+
+        panel4.add(playerLabel);
+        panel4.add(vsLabel);
+        panel4.add(opponentLabel);
 
         panel2.add(textPane);
+        panel2.setBackground(Color.white);
         setTextAlignment();
 
         textPane.setEditable(false);
         textPane.setText("Welcome!\nPress play to start.\n HEJ HEJ\nsad\n adf \n jg  \n HEJ HEJ HEJ HEJ");
         panel2.setPreferredSize(new Dimension(280,100));
-//        textArea.setSize(new Dimension(280,100));
-//        textArea.setLineWrap(true);
-//        textArea.setEditable(false);
-//        textArea.setText("\tWelcome!\nPress play to start.\n HEJ HEJ\nsad\n adf \n jg");
 
-        add(panel3, BorderLayout.SOUTH);
 
-        panel3.add(start);
+        panel3.add(startButton);
 
-        setSize(300,300);
+        setSize(300,500);
 //        pack();
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -79,6 +95,31 @@ public class QuizCampGUI extends JFrame {
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
         doc.setParagraphAttributes(0,doc.getLength(),center,false);
     }
+
+    public JPanel getPanel3(){
+        return panel3;
+    }
+
+    public JButton[] getGameButtons(){
+        return new JButton[]{gameButton1,gameButton2,gameButton3,gameButton4};
+    }
+
+    public JButton getStartButton(){
+        return startButton;
+    }
+
+    public JTextPane getTextPane(){
+        return textPane;
+    }
+
+    public JLabel getPlayerLabel(){
+        return playerLabel;
+    }
+
+    public JLabel getOpponentLabel(){
+        return opponentLabel;
+    }
+
 
     public static void main(String[] args) {
         new QuizCampGUI();
