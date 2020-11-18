@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Category {
+public class Category implements Serializable {
     String categoryName;
     List<Question> questionList = new ArrayList<>();
 

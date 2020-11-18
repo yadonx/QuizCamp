@@ -1,10 +1,11 @@
 package model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-class Question {
+public class Question implements Serializable {
     final String questionText;
     final List<String> answerList = new ArrayList<>();
     final String correctAnswer;
