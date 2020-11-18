@@ -1,6 +1,8 @@
 package model;
 
-public class Question {
+import java.io.Serializable;
+
+public class Question implements Serializable {
     final String questionText;
     final String answer1;
     final String answer2;

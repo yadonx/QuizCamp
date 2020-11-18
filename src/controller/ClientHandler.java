@@ -1,5 +1,10 @@
 package controller;
 
+import model.Answer;
+import model.Question;
+import model.QuestionOfCategory;
+import model.Result;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -22,63 +27,50 @@ public class ClientHandler {
     private String opponentsName;
 
     private ObjectOutputStream outputStream;
+    private ObjectInputStream inputStream;
 
-    private Thread sendToServerThread;
-    private Thread receiveFromServerThread;
-
-    public void connectToServer() {
-        connectSocket();
-        if (socket != null)
-            receiveFromServerThread = new Thread(() -> {
-
-                try {
-                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-                    Object input;
-
-                    while (true) {
-                        input = in.readObject();
-                        System.out.println("Tar emot: " + input);
-                    }
-
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
-                }
-            });
-        receiveFromServerThread.start();
+    public ClientHandler() throws IOException { // no recovery from exception so better if program crushes
+        this.socket = new Socket(ip, port);
+        this.outputStream = new ObjectOutputStream(socket.getOutputStream());
+        this.inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
-    private void connectSocket() {
+    public QuestionOfCategory receiveQuestion() {//GUI can call n receive question from server via client
         try {
-            socket = new Socket(ip, port);
-            outputStream = new ObjectOutputStream(socket.getOutputStream());
+            return (QuestionOfCategory) inputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void sendAnswer(Answer clientAnswer) {//GUI can send answer to Server
+        try {
+            outputStream.writeObject(clientAnswer);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
-    public void sendToServer(Object output) {
-        if (socket != null)
-            sendToServerThread = new Thread(() -> {
-                try {
-                    outputStream.writeObject(output);
-                    System.out.println("Skickar: " + output.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        sendToServerThread.start();
-    }
-
-
-    public static void main(String[] args) {
-        ClientHandler ch = new ClientHandler();
-        ch.connectToServer();
-
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            String s = sc.nextLine();
-            ch.sendToServer(s);
+    public Question receiveRoundQuestion() {
+        try {
+            return (Question) inputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
         }
+        return null;
+    }
+
+    public Result receiveResult() {
+        try {
+            return (Result) inputStream.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static void main(String[] args) throws IOException {//no recovery from exception so program crush
+        ClientHandler ch = new ClientHandler();
     }
 }

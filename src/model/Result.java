@@ -1,8 +1,9 @@
 package model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Result {//TODO: add set score method
+public class Result implements Serializable {//TODO: add set score method
     private List<Integer> playerOneScores;
     private List<Integer> playerTwoScores;
 
