@@ -34,6 +34,7 @@ public class ServerListener {
 
 
                 final Socket socket = serverSocket.accept();
+                System.out.println(pairList.contains(pairList));
                 Server clientSocket = new Server(socket, pairList.get(counterForList));
                 clientSocket.start();
             } catch (Exception e) {

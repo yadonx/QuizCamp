@@ -37,8 +37,13 @@ public class Server extends Thread {
             in = new ObjectInputStream(socket.getInputStream());
 
             pair.add(out);
-            game = new Game(pair);
+//            game = new Game(pair);
             Object input = null;
+
+            // tillfällig lösning för att testa.
+            if (pair.size() == 2)
+                for (ObjectOutputStream s : pair)
+                    s.writeObject("paired");
             while (true) {
                 try {
                    input = in.readObject();

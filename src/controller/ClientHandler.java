@@ -3,7 +3,10 @@ package controller;
 
 
 import view.QuizCampGUI;
+import model.*;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -24,6 +27,13 @@ public class ClientHandler {
 
     private QuizCampGUI gui;
 
+    private JPanel buttonPanel;
+    private JButton[] gameButtons;
+    private JButton startButton;
+    private JTextPane textPane;
+    private JLabel playerLabel;
+    private JLabel opponentLabel;
+
     private String username;
     private String opponentsName;
 
@@ -36,6 +46,26 @@ public class ClientHandler {
 
     public ClientHandler(QuizCampGUI gui){
         this.gui = gui;
+        this.gameButtons = gui.getGameButtons();
+        this.buttonPanel = gui.getButtonPanel();
+        this.startButton = gui.getStartButton();
+        this.textPane = gui.getTextPane();
+        this.playerLabel = gui.getPlayerLabel();
+        this.opponentLabel = gui.getOpponentLabel();
+    }
+
+    public void startButton(){
+        buttonPanel.removeAll();
+        buttonPanel.add(new JLabel("Searching for opponent"));
+        buttonPanel.updateUI();
+    }
+
+    private void switchToGameButtons(){
+        buttonPanel.removeAll();
+        buttonPanel.setLayout(new GridLayout(2,2));
+        for (JButton button : gameButtons)
+            buttonPanel.add(button);
+        buttonPanel.updateUI();
     }
 
     public void connectToServer() {
@@ -50,6 +80,12 @@ public class ClientHandler {
                     while (true) {
                         input = in.readObject();
                         System.out.println("Tar emot: " + input);
+
+                        // tillfällig lösning för att testa.
+                        if (input instanceof String){
+                            if (input.equals("paired"))
+                                switchToGameButtons();
+                        }
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
@@ -69,7 +105,7 @@ public class ClientHandler {
 
     }
 
-    public void sendToServer(Object output) {
+    private void sendToServer(Object output) {
         if (socket != null)
             sendToServerThread = new Thread(() -> {
                 try {
@@ -81,8 +117,6 @@ public class ClientHandler {
             });
         sendToServerThread.start();
     }
-
-
 
 
     public static void main(String[] args) {
