@@ -22,13 +22,22 @@ public class Server extends Thread {
     private ObjectInputStream in;
     private Game game;
 
+    private int counter;
+    private List<List> pairList;
+
+
     private List<ObjectOutputStream> pair;
 
 
-    public Server(Socket socket, List<ObjectOutputStream> pair) {
+    public Server(Socket socket, List<List> pairList, int counterForList) {
         this.socket = socket;
-        this.pair = pair;
+        this.pair = pairList.get(pairList.size()-1);
+        this.pairList = pairList;
+        this.counter = counterForList;
+        System.out.println(pairList.size());
     }
+
+
 
     public void run() {
 
@@ -45,14 +54,14 @@ public class Server extends Thread {
                 for (ObjectOutputStream s : pair)
                     s.writeObject("paired");
             while (true) {
-                try {
+//                try {
                    input = in.readObject();
-                }catch (SocketException e){
-                    if (e.getMessage().equals("Connection reset")) {
-                        in = new ObjectInputStream(socket.getInputStream());
-                        input = in.readObject();
-                    }
-                }
+//                }catch (SocketException e){
+//                    if (e.getMessage().equals("Connection reset")) {
+//                        in = new ObjectInputStream(socket.getInputStream());
+//                        input = in.readObject();
+//                    }
+//                }
                 System.out.println(input);
 
                 int test = 1;
@@ -62,6 +71,14 @@ public class Server extends Thread {
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+            counter--;
+            pairList.remove(pair);
+            System.out.println(counter);
+            System.out.println(pairList.size());
         }
+//        finally {
+//            counter--;
+//            pairList.remove(pair);
+//        }
     }
 }

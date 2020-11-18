@@ -7,6 +7,8 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Viktor Kodet <br>
@@ -16,11 +18,13 @@ import java.awt.*;
  */
 public class QuizCampGUI extends JFrame {
 
-    private JButton gameButton1 = new JButton("Button 1");
-    private JButton gameButton2 = new JButton("Button 2");
-    private JButton gameButton3 = new JButton("Button 3");
-    private JButton gameButton4 = new JButton("Button 4");
-    private JButton[] gameButtons = new JButton[]{new JButton(),new JButton(), new JButton(), new JButton()};
+//    private JButton gameButton1 = new JButton("Button 1");
+//    private JButton gameButton2 = new JButton("Button 2");
+//    private JButton gameButton3 = new JButton("Button 3");
+//    private JButton gameButton4 = new JButton("Button 4");
+    private JButton[] gameButtons = new JButton[]{new JButton("k1"),new JButton("k2"),
+            new JButton("k3"), new JButton("k4")};
+
     private JButton startButton = new JButton("Play");
 
     private JPanel topPanel = new JPanel();
@@ -44,6 +48,12 @@ public class QuizCampGUI extends JFrame {
             clientHandler.startButton();
             clientHandler.connectToServer();
         });
+
+        ActionListener gameButtonListener = e -> {
+            System.out.println(e.getActionCommand());
+        };
+        for (JButton e : gameButtons)
+            e.addActionListener(gameButtonListener);
     }
 
     private void frame(){
@@ -81,7 +91,8 @@ public class QuizCampGUI extends JFrame {
         textPane.setText("Welcome!\nPress play to start.");
         questionPanel.setPreferredSize(new Dimension(280,100));
 
-
+        for (JButton b : gameButtons)
+            b.setPreferredSize(new Dimension(50,50));
 
         buttonPanel.add(startButton);
 
@@ -104,7 +115,7 @@ public class QuizCampGUI extends JFrame {
     }
 
     public JButton[] getGameButtons(){
-        return new JButton[]{gameButton1,gameButton2,gameButton3,gameButton4};
+        return gameButtons;
     }
 
     public JButton getStartButton(){

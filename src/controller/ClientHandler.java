@@ -1,7 +1,6 @@
 package controller;
 
 
-
 import view.QuizCampGUI;
 import model.*;
 
@@ -19,7 +18,7 @@ import java.util.Scanner;
  * Date: 2020-11-13
  * Time: 12:48
  * Project: QuizCamp
- * */
+ */
 public class ClientHandler {
     private int port = 12345;
     private String ip = "127.0.0.1";
@@ -42,9 +41,9 @@ public class ClientHandler {
     private Thread sendToServerThread;
     private Thread receiveFromServerThread;
 
-    ClientHandler(){}// temp
+    ClientHandler() {} // temp
 
-    public ClientHandler(QuizCampGUI gui){
+    public ClientHandler(QuizCampGUI gui) {
         this.gui = gui;
         this.gameButtons = gui.getGameButtons();
         this.buttonPanel = gui.getButtonPanel();
@@ -54,15 +53,15 @@ public class ClientHandler {
         this.opponentLabel = gui.getOpponentLabel();
     }
 
-    public void startButton(){
+    public void startButton() {
         buttonPanel.removeAll();
-        buttonPanel.add(new JLabel("Searching for opponent"));
+        buttonPanel.add(new JLabel("Searching for opponent..."));
         buttonPanel.updateUI();
     }
 
-    private void switchToGameButtons(){
+    private void switchToGameButtons() {
         buttonPanel.removeAll();
-        buttonPanel.setLayout(new GridLayout(2,2));
+        buttonPanel.setLayout(new GridLayout(2, 2));
         for (JButton button : gameButtons)
             buttonPanel.add(button);
         buttonPanel.updateUI();
@@ -82,7 +81,7 @@ public class ClientHandler {
                         System.out.println("Tar emot: " + input);
 
                         // tillfällig lösning för att testa.
-                        if (input instanceof String){
+                        if (input instanceof String) {
                             if (input.equals("paired"))
                                 switchToGameButtons();
                         }

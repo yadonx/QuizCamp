@@ -32,10 +32,8 @@ public class ServerListener {
                 else if (clients == 2)
                     clients = 1;
 
-
                 final Socket socket = serverSocket.accept();
-                System.out.println(pairList.contains(pairList));
-                Server clientSocket = new Server(socket, pairList.get(counterForList));
+                Server clientSocket = new Server(socket, pairList, counterForList);
                 clientSocket.start();
             } catch (Exception e) {
                 e.printStackTrace();
