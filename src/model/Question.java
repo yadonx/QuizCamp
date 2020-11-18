@@ -1,26 +1,42 @@
 package model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Question implements Serializable {
-    final String questionText;
-    final List<String> answerList = new ArrayList<>();
-    final String correctAnswer;
 
-    Question(String questionText, String answer1, String answer2, String answer3, String answer4) {
-        this.questionText = questionText;
-        answerList.add(answer1);
-        answerList.add(answer2);
-        answerList.add(answer3);
-        answerList.add(answer4);
-        correctAnswer = answer1;
+    private String category, question, answer, alt1, alt2, alt3;
+
+    public Question(String category, String question, String answer, String alt1, String alt2, String alt3) {
+        this.question = question;
+        this.answer = answer;
+        this.category = category;
+        this.alt1 = alt1;
+        this.alt2 = alt2;
+        this.alt3 = alt3;
+
     }
 
-    public List<String> getShuffledAnswers(){
-        Collections.shuffle(answerList);
-        return answerList;
+    public String getQuestion() {
+        return question;
+    }
+
+    public String getAnswer() {
+        return answer;
+    }
+
+    public String getAlternative1() {
+        return alt1;
+    }
+
+    public String getAlternative2() {
+        return alt2;
+    }
+
+    public String getAlternative3() {
+        return alt3;
+    }
+
+    public String getCategory() {
+        return category;
     }
 }
