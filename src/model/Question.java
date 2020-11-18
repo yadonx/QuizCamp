@@ -1,6 +1,6 @@
 package model;
 
-class Question {
+public class Question {
     final String questionText;
     final String answer1;
     final String answer2;

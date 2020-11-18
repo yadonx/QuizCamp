@@ -1,12 +1,13 @@
 package server;
 
+import model.Answer;
+import model.Question;
+import model.QuestionOfCategory;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
-import java.util.List;
 
 /**
  * Created by Emil Johansson
@@ -16,47 +17,52 @@ import java.util.List;
  * Package: server
  */
 
-public class Server extends Thread {
-    private Socket socket;
-    private ObjectOutputStream out;
-    private ObjectInputStream in;
-    private Game game;
-
-    private List<ObjectOutputStream> pair;
+public class Server {
+    private final Socket socket;
+    private final ObjectOutputStream out;
+    private final ObjectInputStream in;
 
 
-    public Server(Socket socket, List<ObjectOutputStream> pair) {
+    public Server(Socket socket) throws IOException {
         this.socket = socket;
-        this.pair = pair;
+        out = new ObjectOutputStream(socket.getOutputStream());
+        in = new ObjectInputStream(socket.getInputStream());
+
     }
 
-    public void run() {
-
+    public Answer sendQuestionGetAnswer(Question question) {
         try {
-            out = new ObjectOutputStream(socket.getOutputStream());
-            in = new ObjectInputStream(socket.getInputStream());
-
-            pair.add(out);
-            game = new Game(pair);
-            Object input = null;
-            while (true) {
-                try {
-                   input = in.readObject();
-                }catch (SocketException e){
-                    if (e.getMessage().equals("Connection reset")) {
-                        in = new ObjectInputStream(socket.getInputStream());
-                        input = in.readObject();
-                    }
-                }
-                System.out.println(input);
-
-                int test = 1;
-                for (ObjectOutputStream stream : pair)
-                    stream.writeObject(input + " " + test++);
-
-            }
+            out.writeObject(question);
+            return (Answer) in.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
+        return null;//TODO:add try again feature
+    }
+
+    public Answer chooseCategory(QuestionOfCategory category) {
+
+        try {
+            out.writeObject(category);
+            return (Answer) in.readObject();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return null;//TODO:add feature to try again
+    }
+
+    public void sendScores(Result scores) {
+
+        try {
+            out.writeObject(scores);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void close() throws IOException {
+        in.close();
+        out.close();
+        socket.close();
     }
 }

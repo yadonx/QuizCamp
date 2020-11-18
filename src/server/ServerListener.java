@@ -14,28 +14,20 @@ import java.util.List;
  * Project: QuizCamp
  */
 public class ServerListener {
-    private int port = 12345;
-    private int clients = 1;
-    private int counterForList = -1;
-    private List<List> pairList = new ArrayList<>();
+    private final int port = 12345;
 
     public ServerListener() throws IOException {
         ServerSocket serverSocket = new ServerSocket(port);
-
         while (true) {
             try {
-                if (clients == 1){
-                    pairList.add(new ArrayList());
-                    counterForList++;
-                    clients++;
-                }
-                else if (clients == 2)
-                    clients = 1;
+                final Socket socket1 = serverSocket.accept();
+                final Socket socket2 = serverSocket.accept();
+                Server server1 = new Server(socket1);
+                Server server2 = new Server(socket2);
+                Game game = new Game(server1, server2);
+                game.start();
 
 
-                final Socket socket = serverSocket.accept();
-                Server clientSocket = new Server(socket, pairList.get(counterForList));
-                clientSocket.start();
             } catch (Exception e) {
                 e.printStackTrace();
             }
