@@ -27,7 +27,6 @@ public class ServerListener {
                 Game game = new Game(server1, server2);
                 game.start();
 
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

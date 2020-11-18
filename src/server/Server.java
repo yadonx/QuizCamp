@@ -3,6 +3,7 @@ package server;
 import model.Answer;
 import model.Question;
 import model.QuestionOfCategory;
+import model.Result;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
