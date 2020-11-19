@@ -1,6 +1,7 @@
 package client;
 
 import client.controller.Controller;
+import client.controller.LobbyController;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,7 @@ public class Client extends Application  {
 
     private int clientID;
     Controller controller;
+    LobbyController lobbyController;
     private ClientConnection clientConnection;
     private Game game;
     private Stage stage;
@@ -36,8 +38,8 @@ public class Client extends Application  {
             panel = loader.load();
             Scene scene = new Scene(panel);
 
-            controller = loader.getController();
-            controller.setClient(this);
+            lobbyController = loader.getController();
+            lobbyController.setClient(this);
 
             stage.setScene(scene);
             stage.show();
@@ -56,20 +58,23 @@ public class Client extends Application  {
     }
 
     public void loadGameGUI (){
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gui.fxml"));
-            Parent panel = loader.load();
-            Scene scene = new Scene(panel);
 
-            controller = loader.getController();
-            controller.setClient(this);
+        Platform.runLater(() -> {
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("view/gui.fxml"));
+                Parent panel = loader.load();
+                Scene scene = new Scene(panel);
 
-            stage.setScene(scene);
+                controller = loader.getController();
+                controller.setClient(this);
 
-            connect();
-        }catch (IOException ex) {
-            ex.printStackTrace();
-        }
+                stage.setScene(scene);
+
+            }catch (IOException ex) {
+                ex.printStackTrace();
+            }
+       });
+
     }
 
     private class ClientConnection implements Runnable {
@@ -85,6 +90,7 @@ public class Client extends Application  {
         @Override
         public void run() {
             try {
+
                 socket = new Socket("localhost", 12345);
                 objectIn = new ObjectInputStream(socket.getInputStream());
                 objectOut = new ObjectOutputStream(socket.getOutputStream());
@@ -94,6 +100,7 @@ public class Client extends Application  {
 
                 /* TODO fix crash that happens when second player connects too fast */
                 game = (Game) objectIn.readObject();
+                loadGameGUI();
 
                 Platform.runLater(() -> {
                     stage.setTitle("Quiz Game - Player #" + clientID);
