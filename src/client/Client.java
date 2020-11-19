@@ -59,8 +59,8 @@ public class Client {
         return null;
     }
 
-    public boolean isPaired() {
-        try {
+    public boolean isPaired() {//server checks if client can send n receive stuff, is active n socket is working
+        try {                   //happens when server listener is going to match client to someone
             while (true) {
                 Object input = inputStream.readObject();
                 if (input instanceof String) {

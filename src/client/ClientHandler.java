@@ -36,14 +36,14 @@ public class ClientHandler {
         this.playerLabel = gui.getPlayerLabel();
         this.opponentLabel = gui.getOpponentLabel();
 
-        startButton.addActionListener(e -> {//doesn't connect to server until play is clicked
+        startButton.addActionListener(e -> {//*doesn't connect to server until play is clicked
             startButton();
             connectToServer();
         });
 
         ActionListener gameButtonListener = e -> {
             System.out.println(e.getActionCommand());
-            client.sendAnswer(new Answer(e.getActionCommand()));//when button is clicked we send it to server/game as answer
+            client.sendAnswer(new Answer(e.getActionCommand()));//calling method sendAnswer when button is clicked we SEND it to server/game as answer
         };
         for (JButton e : gameButtons)
             e.addActionListener(gameButtonListener);
@@ -65,19 +65,18 @@ public class ClientHandler {
     }
 
     public void connectToServer() {
-        for (int i = 0; i < 3 && client == null; i++) { //try 3 time to connect or as long as client is null
-            try {
-                client = new Client();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        //create client
+        try {
+            client = new Client();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        if (client != null && client.isPaired()) {//to check if clients are connected or not after previous loop
+        if (client != null && client.isPaired()) {//to check if clients are connected n able to receive stuff
             QuestionOfCategory category = client.receiveQuestion();
             for (int i = 0; i < gameButtons.length; i++) {
                 gameButtons[i].setText(category.getCategories().get(i));
-            }//77-80 temporarily code
+            }//76-79 temporarily code
             switchToGameButtons();
         }
         //TODO: something went wrong

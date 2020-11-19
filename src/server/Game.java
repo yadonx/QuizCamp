@@ -20,10 +20,15 @@ public class Game extends Thread {
     public Game(Server player1, Server player2) {
         this.player1 = player1;
         this.player2 = player2;
-        Answer answer1 = player1.chooseCategory(new QuestionOfCategory("A", "B", "C", "D"));
+
+        QuestionOfCategory q1 = new QuestionOfCategory("A", "B", "C", "D");
+        Answer answer1 = player1.chooseCategory(q1);
         System.out.println(answer1.getSelectedAnswer());
-        Answer answer2 = player2.chooseCategory(new QuestionOfCategory("A1", "B1", "C1", "D1"));
+
+        QuestionOfCategory q2 = new QuestionOfCategory("A1", "B1", "C1", "D1");
+        Answer answer2 = player2.chooseCategory(q2);
         System.out.println(answer2.getSelectedAnswer());
+
         QuestionGenerator questionGenerator = new QuestionGenerator();
         questions = questionGenerator.getShuffledCategories(4);
     }
