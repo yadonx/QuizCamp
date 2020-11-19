@@ -29,4 +29,8 @@ public class LobbyController {
         this.client = client;
     }
 
+    public String getPlayerName() {
+        return player;
+    }
+
 }

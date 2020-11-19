@@ -1,4 +1,4 @@
-package model;
+package server.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -22,8 +22,8 @@ public class Game implements Serializable {
         qa = db.getQuestions().get(0);
         answers = new ArrayList<>(4);
 
-        setPlayer1("#1");
-        setPlayer2("#2");
+        //setPlayer1("#1");
+        //setPlayer2("#2");
 
         score1 = 0;
         score2 = 0;

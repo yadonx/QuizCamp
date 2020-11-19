@@ -1,6 +1,6 @@
 package server;
 
-import model.Game;
+import server.model.Game;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -52,9 +52,9 @@ public class Server {
             clients.add(clientHandler);
             executorService.execute(clientHandler);
             game.setServerName("#" + gameServers.indexOf(gameServers.getLast()));
-            System.out.println("[GAME SERVER #" + game.getServerName() + "] Player #" + clients.size() + " has connected.");
+            System.out.println("[GAME SERVER " + game.getServerName() + "] Player #" + clients.size() + " has connected.");
             if (clients.size() == 2) {
-                System.out.println("[GAME SERVER #" + game.getServerName() + "] 2/2 players. Launching game.");
+                System.out.println("[GAME SERVER " + game.getServerName() + "] 2/2 players. Launching game.");
             }
 
         }
@@ -92,26 +92,40 @@ public class Server {
                         c.objectOut.flush();
                     }
 
+                    game.setPlayer1(((Game) clients.get(0).objectIn.readObject()).getPlayer1());
+                    System.out.println("[GAME SERVER " + game.getServerName() + "] Player 1 name is " + game.getPlayer1());
+
+                    game.setPlayer2(((Game) clients.get(1).objectIn.readObject()).getPlayer2());
+                    System.out.println("[GAME SERVER " + game.getServerName() + "] Player 2 name is " + game.getPlayer2());
+
+
+                    // send Game object
+                    for (ClientHandler c : clients) {
+                        c.objectOut.reset();
+                        c.objectOut.writeObject(game);
+                        c.objectOut.flush();
+                    }
+
                     // receive selected answers from clients
                     for (ClientHandler c : clients) {
                         if (c.clientID == 1) {
                             game.setSelected1(((Game) clients.get(0).objectIn.readObject()).getSelected1());
-                            System.out.println("[GAME SERVER #" + game.getServerName() + "] Player 1 picked " + game.getSelected1());
+                            System.out.println("[GAME SERVER " + game.getServerName() + "] Player 1 picked " + game.getSelected1());
                         } else if (c.clientID == 2) {
                             game.setSelected2(((Game) clients.get(1).objectIn.readObject()).getSelected2());
-                            System.out.println("[GAME SERVER #" + game.getServerName() + "] Player 2 picked " + game.getSelected2());
+                            System.out.println("[GAME SERVER " + game.getServerName() + "] Player 2 picked " + game.getSelected2());
                         }
                     }
 
                     game.gradeAnswers();
-                    System.out.println("[GAME SERVER #" + game.getServerName() + "] The answers from the players are graded.");
+                    System.out.println("[GAME SERVER " + game.getServerName() + "] The answers from the players are graded.");
 
                     for (ClientHandler c : clients) {
                         c.objectOut.reset();
                         c.objectOut.writeObject(game);
                         c.objectOut.flush();
                     }
-                    System.out.println("[GAME SERVER #" + game.getServerName() + "] Points are set.");
+                    System.out.println("[GAME SERVER " + game.getServerName() + "] Points are set.");
 
                 } catch (IOException | NullPointerException | ClassNotFoundException ex) {
                     ex.printStackTrace();

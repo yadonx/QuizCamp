@@ -8,7 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import model.Game;
+import server.model.Game;
 
 
 import java.io.*;
@@ -97,9 +97,27 @@ public class Client extends Application  {
                 dataIn = new DataInputStream(socket.getInputStream());
 
                 clientID = dataIn.readInt();
+                System.out.println("[CLIENT] ClientID " + clientID);
 
                 /* TODO fix crash that happens when second player connects too fast */
                 game = (Game) objectIn.readObject();
+
+                Platform.runLater(() -> {
+                    if (clientID == 1) {
+                        game.setPlayer1(lobbyController.getPlayerName());
+                        System.out.println(clientID + " " + game.getPlayer1());
+                        sendGame();
+                    } else if (clientID == 2) {
+                        game.setPlayer2(lobbyController.getPlayerName());
+                        System.out.println(clientID + " " + game.getPlayer2());
+                        sendGame();
+                    }
+                });
+
+               // sendGame();
+
+                game = (Game) objectIn.readObject();
+
                 loadGameGUI();
 
                 Platform.runLater(() -> {
@@ -108,6 +126,7 @@ public class Client extends Application  {
                     controller.populate();
                 });
                 System.out.println("[CLIENT] Game started. First question is displayed.");
+
 
                 game = (Game) objectIn.readObject();
 
@@ -124,15 +143,13 @@ public class Client extends Application  {
         private void sendGame() {
             try {
                 objectOut.reset();
-                if (clientID == 1) {
-                    System.out.println("[CLIENT] Player #1 sent game data.");
-                    objectOut.writeObject(game);
-                    objectOut.flush();
+               if (clientID == 1) {
+                   System.out.println("[CLIENT] Player #1 sent game data.");
                 } else if (clientID == 2) {
                     System.out.println("[CLIENT] Player #2 sent game data.");
-                    objectOut.writeObject(game);
-                    objectOut.flush();
-                }
+               }
+                objectOut.writeObject(game);
+                objectOut.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }
