@@ -28,7 +28,6 @@ public class Server {
 
             gameServers.add(new GameServer());
 
-
             System.out.println("[SERVER] Waiting for connections...");
             // loop, waiting for incoming connections and distributes them to a game server.
             // creates a new game server if the most recent one is full.
@@ -81,7 +80,7 @@ public class Server {
                     dataOut = new DataOutputStream((socket.getOutputStream()));
                     objectIn = new ObjectInputStream(socket.getInputStream());
 
-                    // send client ID
+                    // send client ID to clients
                     dataOut.writeInt(clientID);
                     dataOut.flush();
 
@@ -94,7 +93,7 @@ public class Server {
                         c.objectOut.writeObject(game);
                     }
 
-                    // receive player names from clients
+                    // receive player names from clients and update Game
                     game.setPlayer1(((Game) clients.get(0).objectIn.readObject()).getPlayer1());
                     System.out.println("[GAME SERVER " + game.getServerName() + "] Player 1 name is " + game.getPlayer1());
 
@@ -107,7 +106,7 @@ public class Server {
                         c.objectOut.writeObject(game);
                     }
 
-                    // receive selected answers from clients
+                    // receive selected answers from clients and update Game
                     for (ClientHandler c : clients) {
                         if (c.clientID == 1) {
                             game.setSelected1(((Game) clients.get(0).objectIn.readObject()).getSelected1());
