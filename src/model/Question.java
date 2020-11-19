@@ -1,21 +1,33 @@
 package model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Question implements Serializable {
-    final String questionText;
-    final String answer1;
-    final String answer2;
-    final String answer3;
-    final String answer4;
+    private final String questionText;
+    private final List<String> answers = new ArrayList<>();
+
     final String correctAnswer;
 
     Question(String questionText, String answer1, String answer2, String answer3, String answer4) {
         this.questionText = questionText;
-        this.answer1 = answer1;
-        this.answer2 = answer2;
-        this.answer3 = answer3;
-        this.answer4 = answer4;
+        this.answers.add(answer1);
+        this.answers.add(answer2);
+        this.answers.add(answer3);
+        this.answers.add(answer4);
         correctAnswer = answer1;
+    }
+
+    public String getQuestionText() {
+        return questionText;
+    }
+
+    public List<String> getAnswers() {
+        return answers;
+    }
+
+    public String getCorrectAnswer() {
+        return correctAnswer;
     }
 }

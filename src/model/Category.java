@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class Category {
-    String categoryName;
-    List<Question> questionList = new ArrayList<>();
+    private final String categoryName;
+    private final List<Question> questionList = new ArrayList<>();
 
     Category(String categoryName) {
         this.categoryName = categoryName;
@@ -16,15 +16,18 @@ public class Category {
         questionList.add(question);
     }
 
-    public List<Question> getShuffledQuestions(int amount){
+    public List<Question> getShuffledQuestions(int amount) {
         List<Question> tempList = new ArrayList<>(questionList);
         tempList.remove(0);
         Collections.shuffle(tempList);
         List<Question> outList = new ArrayList<>();
-        for (int i = 0; i < amount; i++){
+        for (int i = 0; i < amount; i++) {
             outList.add(tempList.get(i));
         }
         return outList;
     }
 
+    public String getCategoryName() {
+        return categoryName;
+    }
 }

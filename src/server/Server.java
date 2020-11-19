@@ -20,21 +20,19 @@ import java.net.Socket;
 
 public class Server {
     private final Socket socket;
-    private final ObjectOutputStream out;
-    private final ObjectInputStream in;
-
+    private final ObjectOutputStream outputStream;
+    private final ObjectInputStream inputStream;
 
     public Server(Socket socket) throws IOException {
         this.socket = socket;
-        out = new ObjectOutputStream(socket.getOutputStream());
-        in = new ObjectInputStream(socket.getInputStream());
-
+        outputStream = new ObjectOutputStream(socket.getOutputStream());
+        inputStream = new ObjectInputStream(socket.getInputStream());
     }
 
     public Answer sendQuestionGetAnswer(Question question) {
         try {
-            out.writeObject(question);
-            return (Answer) in.readObject();
+            outputStream.writeObject(question);
+            return (Answer) inputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -42,10 +40,9 @@ public class Server {
     }
 
     public Answer chooseCategory(QuestionOfCategory category) {
-
         try {
-            out.writeObject(category);
-            return (Answer) in.readObject();
+            outputStream.writeObject(category);
+            return (Answer) inputStream.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -53,17 +50,41 @@ public class Server {
     }
 
     public void sendScores(Result scores) {
-
         try {
-            out.writeObject(scores);
+            outputStream.writeObject(scores);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void close() throws IOException {
-        in.close();
-        out.close();
-        socket.close();
+    public void sendPaired() {
+        try {
+            outputStream.writeObject("paired");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public boolean isReady() {
+        try {
+            outputStream.writeObject("ready?");
+            Object input = inputStream.readObject();
+            if (input instanceof String) {
+                return input.equals("Yes!");
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public void close() {
+        try {
+            inputStream.close();
+            outputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

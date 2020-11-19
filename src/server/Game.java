@@ -1,14 +1,14 @@
 package server;
 
-import model.Category;
-import model.QuestionGenerator;
+import model.*;
 
 
+import java.io.IOException;
 import java.util.List;
 
 public class Game extends Thread {
 
-    private final Server player1;//TODO:close servers at the end of the game
+    private final Server player1;
     private final Server player2;
     private int score1, score2;
 
@@ -20,21 +20,16 @@ public class Game extends Thread {
     public Game(Server player1, Server player2) {
         this.player1 = player1;
         this.player2 = player2;
+        Answer answer1 = player1.chooseCategory(new QuestionOfCategory("A", "B", "C", "D"));
+        System.out.println(answer1.getSelectedAnswer());
+        Answer answer2 = player2.chooseCategory(new QuestionOfCategory("A1", "B1", "C1", "D1"));
+        System.out.println(answer2.getSelectedAnswer());
         QuestionGenerator questionGenerator = new QuestionGenerator();
-        questions = questionGenerator.getShuffledCategories(3);
+        questions = questionGenerator.getShuffledCategories(4);
     }
 
     @Override
     public void run() {
-        //loop communication between game and server
-/*        for (int round = 1; round <= numberOfRounds; round++) {//1we ask player to select category
 
-            Answer selectCategory;
-            if (round % 2 == 1) {//mode is odd 1 player, mode even 2 player chooses
-                selectCategory = player1.chooseCategory(new QuestionofCategory("a", "b", "c"));
-            } else {
-                selectCategory = player2.chooseCategory(new QuestionofCategory("a", "b", "c");
-            }
-        }*/
     }
 }

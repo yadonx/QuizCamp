@@ -1,13 +1,12 @@
 package view;
 
-import controller.ClientHandler;
+import client.ClientHandler;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -18,11 +17,7 @@ import java.awt.event.ActionListener;
  */
 public class QuizCampGUI extends JFrame {
 
-//    private JButton gameButton1 = new JButton("Button 1");
-//    private JButton gameButton2 = new JButton("Button 2");
-//    private JButton gameButton3 = new JButton("Button 3");
-//    private JButton gameButton4 = new JButton("Button 4");
-    private JButton[] gameButtons = new JButton[]{new JButton("k1"),new JButton("k2"),
+    private JButton[] gameButtons = new JButton[]{new JButton("k1"), new JButton("k2"),
             new JButton("k3"), new JButton("k4")};
 
     private JButton startButton = new JButton("Play");
@@ -41,22 +36,7 @@ public class QuizCampGUI extends JFrame {
     private JLabel vsLabel = new JLabel(" VS ");
 
 
-    public QuizCampGUI(){
-        frame();
-        ClientHandler clientHandler = new ClientHandler(this);
-        startButton.addActionListener(e -> {
-            clientHandler.startButton();
-            clientHandler.connectToServer();
-        });
-
-        ActionListener gameButtonListener = e -> {
-            System.out.println(e.getActionCommand());
-        };
-        for (JButton e : gameButtons)
-            e.addActionListener(gameButtonListener);
-    }
-
-    private void frame(){
+    public QuizCampGUI() {
         setLayout(new BorderLayout());
         setTitle("Quiz Camp");
 
@@ -65,7 +45,7 @@ public class QuizCampGUI extends JFrame {
         add(buttonPanel, BorderLayout.SOUTH);
 
 
-        topPanel.setLayout(new GridLayout(2,1));
+        topPanel.setLayout(new GridLayout(2, 1));
         scorePanel1.setLayout(new FlowLayout());
         scorePanel2.setLayout(new FlowLayout());
 
@@ -84,58 +64,53 @@ public class QuizCampGUI extends JFrame {
         questionPanel.setBackground(Color.white);
         setTextAlignment();
 
-        Font f = new Font("Dialog",0,20);
+        Font f = new Font("Dialog", 0, 20);
         textPane.setFont(f);
 
         textPane.setEditable(false);
         textPane.setText("Welcome!\nPress play to start.");
-        questionPanel.setPreferredSize(new Dimension(280,100));
+        questionPanel.setPreferredSize(new Dimension(280, 100));
 
         for (JButton b : gameButtons)
-            b.setPreferredSize(new Dimension(50,50));
+            b.setPreferredSize(new Dimension(50, 50));
 
         buttonPanel.add(startButton);
 
-        setSize(300,500);
+        setSize(300, 500);
 //        pack();
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
     }
 
-    private void setTextAlignment(){
+    private void setTextAlignment() {
         StyledDocument doc = textPane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
-        doc.setParagraphAttributes(0,doc.getLength(),center,false);
+        doc.setParagraphAttributes(0, doc.getLength(), center, false);
     }
 
-    public JPanel getButtonPanel(){
+    public JPanel getButtonPanel() {
         return buttonPanel;
     }
 
-    public JButton[] getGameButtons(){
+    public JButton[] getGameButtons() {
         return gameButtons;
     }
 
-    public JButton getStartButton(){
+    public JButton getStartButton() {
         return startButton;
     }
 
-    public JTextPane getTextPane(){
+    public JTextPane getTextPane() {
         return textPane;
     }
 
-    public JLabel getPlayerLabel(){
+    public JLabel getPlayerLabel() {
         return playerLabel;
     }
 
-    public JLabel getOpponentLabel(){
+    public JLabel getOpponentLabel() {
         return opponentLabel;
-    }
-
-
-    public static void main(String[] args) {
-        new QuizCampGUI();
     }
 }
