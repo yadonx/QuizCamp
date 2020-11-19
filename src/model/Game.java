@@ -7,6 +7,7 @@ import java.util.List;
 
 public class Game implements Serializable {
 
+    private String serverName;
     private String player1;
     private String player2;
     private int score1;
@@ -27,6 +28,13 @@ public class Game implements Serializable {
         score1 = 0;
         score2 = 0;
 
+    }
+
+    public String getServerName() {
+        return serverName;
+    }
+    public void setServerName(String serverName) {
+        this.serverName = serverName;
     }
 
     public String getQuestion() {

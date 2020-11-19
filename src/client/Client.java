@@ -30,11 +30,9 @@ public class Client extends Application  {
     public void start(Stage stage) {
         try {
 
-            connect();
-
             this.stage = stage;
             Parent panel;
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/gui.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("view/lobby.fxml"));
             panel = loader.load();
             Scene scene = new Scene(panel);
 
@@ -55,6 +53,23 @@ public class Client extends Application  {
 
     public void sendGame() {
         clientConnection.sendGame();
+    }
+
+    public void loadGameGUI (){
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/gui.fxml"));
+            Parent panel = loader.load();
+            Scene scene = new Scene(panel);
+
+            controller = loader.getController();
+            controller.setClient(this);
+
+            stage.setScene(scene);
+
+            connect();
+        }catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     private class ClientConnection implements Runnable {
@@ -99,7 +114,7 @@ public class Client extends Application  {
                 ex.printStackTrace();
             }
         }
-        public void sendGame() {
+        private void sendGame() {
             try {
                 objectOut.reset();
                 if (clientID == 1) {
