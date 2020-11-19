@@ -100,26 +100,27 @@ public class Client extends Application  {
                 System.out.println("[CLIENT] ClientID " + clientID);
 
                 /* TODO fix crash that happens when second player connects too fast */
+                // receives initial Game object
                 game = (Game) objectIn.readObject();
 
+                // sets given player names in Game
                 Platform.runLater(() -> {
                     if (clientID == 1) {
                         game.setPlayer1(lobbyController.getPlayerName());
-                        System.out.println(clientID + " " + game.getPlayer1());
-                        sendGame();
                     } else if (clientID == 2) {
                         game.setPlayer2(lobbyController.getPlayerName());
-                        System.out.println(clientID + " " + game.getPlayer2());
-                        sendGame();
                     }
                 });
 
-               // sendGame();
+                // sends updated Game to server
+                sendGame();
 
+                // receives updated Game (particularly both players names)
                 game = (Game) objectIn.readObject();
 
                 loadGameGUI();
 
+                // populates the gui with game data
                 Platform.runLater(() -> {
                     stage.setTitle("Quiz Game - Player #" + clientID);
                     controller.setGame(game, clientID);
@@ -127,9 +128,11 @@ public class Client extends Application  {
                 });
                 System.out.println("[CLIENT] Game started. First question is displayed.");
 
-
+                // send has been called when an answer tile was selected.
+                // receives updated Game (eg new scores)
                 game = (Game) objectIn.readObject();
 
+                // displays correct answer and updates score in gui
                 Platform.runLater(() -> {
                     controller.showCorrectAnswer();
                     controller.updateScore(game.getScore1(), game.getScore2());
@@ -149,7 +152,6 @@ public class Client extends Application  {
                     System.out.println("[CLIENT] Player #2 sent game data.");
                }
                 objectOut.writeObject(game);
-                objectOut.flush();
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -17,6 +17,9 @@ public class Server {
     private ExecutorService executorService = Executors.newFixedThreadPool(1000);
     private LinkedList<GameServer> gameServers = new LinkedList<>();
 
+    public static void main(String[] args) {
+        new Server();
+    }
 
     public Server() {
         try {
@@ -24,23 +27,22 @@ public class Server {
             serverSocket = new ServerSocket(PORT);
 
             gameServers.add(new GameServer());
+
+
             System.out.println("[SERVER] Waiting for connections...");
+            // loop, waiting for incoming connections and distributes them to a game server.
+            // creates a new game server if the most recent one is full.
             while (true) {
                 Socket socket = serverSocket.accept();
+                System.out.println("[SERVER] Client connected. Awaiting allocation...");
                 if (gameServers.getLast().clients.size() >= 2) {
                     gameServers.add(new GameServer());
-                }// if (gameServers.getLast().clients.size() < 2) {
+                }
                 gameServers.getLast().acceptConnections(socket);
-                // }
-
             }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
-    }
-
-    public static void main(String[] args) {
-        new Server();
     }
 
     private class GameServer {
@@ -56,10 +58,9 @@ public class Server {
             if (clients.size() == 2) {
                 System.out.println("[GAME SERVER " + game.getServerName() + "] 2/2 players. Launching game.");
             }
-
         }
 
-        public class ClientHandler implements Runnable {
+        private class ClientHandler implements Runnable {
 
             private Socket socket;
             private ObjectOutputStream objectOut;
@@ -84,13 +85,13 @@ public class Server {
                     dataOut.writeInt(clientID);
                     dataOut.flush();
 
+                    // waiting for two players to connect
                     while (clients.size() < 2) { }
 
                     // send Game
                     for (ClientHandler c : clients) {
                         c.objectOut.reset();
                         c.objectOut.writeObject(game);
-                        c.objectOut.flush();
                     }
 
                     // receive player names from clients
@@ -100,12 +101,10 @@ public class Server {
                     game.setPlayer2(((Game) clients.get(1).objectIn.readObject()).getPlayer2());
                     System.out.println("[GAME SERVER " + game.getServerName() + "] Player 2 name is " + game.getPlayer2());
 
-
                     // send updated Game
                     for (ClientHandler c : clients) {
                         c.objectOut.reset();
                         c.objectOut.writeObject(game);
-                        c.objectOut.flush();
                     }
 
                     // receive selected answers from clients
@@ -122,10 +121,10 @@ public class Server {
                     game.gradeAnswers();
                     System.out.println("[GAME SERVER " + game.getServerName() + "] The answers from the players are graded.");
 
+                    // send updated Game
                     for (ClientHandler c : clients) {
                         c.objectOut.reset();
                         c.objectOut.writeObject(game);
-                        c.objectOut.flush();
                     }
                     System.out.println("[GAME SERVER " + game.getServerName() + "] Points are set.");
 
