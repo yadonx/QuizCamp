@@ -80,18 +80,20 @@ public class Server {
                     dataOut = new DataOutputStream((socket.getOutputStream()));
                     objectIn = new ObjectInputStream(socket.getInputStream());
 
+                    // send client ID
                     dataOut.writeInt(clientID);
                     dataOut.flush();
 
                     while (clients.size() < 2) { }
 
-                    // send Game object
+                    // send Game
                     for (ClientHandler c : clients) {
                         c.objectOut.reset();
                         c.objectOut.writeObject(game);
                         c.objectOut.flush();
                     }
 
+                    // receive player names from clients
                     game.setPlayer1(((Game) clients.get(0).objectIn.readObject()).getPlayer1());
                     System.out.println("[GAME SERVER " + game.getServerName() + "] Player 1 name is " + game.getPlayer1());
 
@@ -99,7 +101,7 @@ public class Server {
                     System.out.println("[GAME SERVER " + game.getServerName() + "] Player 2 name is " + game.getPlayer2());
 
 
-                    // send Game object
+                    // send updated Game
                     for (ClientHandler c : clients) {
                         c.objectOut.reset();
                         c.objectOut.writeObject(game);

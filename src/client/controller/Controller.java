@@ -66,6 +66,8 @@ public class Controller implements Initializable {
         pos3.setText(answers.get(2));
         pos4.setText(answers.get(3));
 
+        player1.setText(game.getPlayer1());
+        player2.setText(game.getPlayer2());
     }
 
     @FXML
