@@ -19,6 +19,7 @@ import java.util.Scanner;
  * Time: 12:48
  * Project: QuizCamp
  */
+
 public class ClientHandler {
     private int port = 12345;
     private String ip = "127.0.0.1";
@@ -116,6 +117,8 @@ public class ClientHandler {
             });
         sendToServerThread.start();
     }
+
+
 
 
     public static void main(String[] args) {
