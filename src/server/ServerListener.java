@@ -16,7 +16,6 @@ import java.util.List;
 public class ServerListener {
     private int port = 12345;
     private int clients = 1;
-    private int counterForList = -1;
     private List<List> pairList = new ArrayList<>();
 
     public ServerListener() throws IOException {
@@ -26,14 +25,15 @@ public class ServerListener {
             try {
                 if (clients == 1){
                     pairList.add(new ArrayList());
-                    counterForList++;
-                    clients++;
                 }
-                else if (clients == 2)
-                    clients = 1;
 
                 final Socket socket = serverSocket.accept();
-                Server clientSocket = new Server(socket, pairList, counterForList);
+                Server clientSocket = new Server(socket, pairList.get(pairList.size()-1));
+                if (clients == 2) {
+                    pairList.remove(pairList.size()-1);
+                    clients = 0;
+                }
+                clients++;
                 clientSocket.start();
             } catch (Exception e) {
                 e.printStackTrace();
