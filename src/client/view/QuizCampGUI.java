@@ -1,13 +1,12 @@
-package view;
+package client.view;
 
-import controller.ClientHandler;
+import client.controller.ClientHandler;
 
 import javax.swing.*;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
@@ -34,6 +33,7 @@ public class QuizCampGUI extends JFrame {
     private JPanel scorePanel2 = new JPanel();
 
     private final JTextPane textPane = new JTextPane();
+    private final JTextPane textPane2 = new JTextPane();
 
     private JLabel scoreLabel = new JLabel("Score");
     private JLabel playerLabel = new JLabel("0");
@@ -80,30 +80,39 @@ public class QuizCampGUI extends JFrame {
         scorePanel1.add(scoreLabel);
         scorePanel1.add(opponentLabel);
 
-        questionPanel.add(textPane);
+        questionPanel.setLayout(new BorderLayout());
+        questionPanel.add(textPane, BorderLayout.NORTH);
+        questionPanel.add(textPane2, BorderLayout.CENTER);
         questionPanel.setBackground(Color.white);
-        setTextAlignment();
-
-        Font f = new Font("Dialog",0,20);
-        textPane.setFont(f);
-
-        textPane.setEditable(false);
-        textPane.setText("Welcome!\nPress play to start.");
         questionPanel.setPreferredSize(new Dimension(280,100));
+
+        setTextAlignment(textPane);
+        setTextAlignment(textPane2);
+
+        textPane.setFont(new Font("Dialog",0,25));
+        textPane.setEditable(false);
+        textPane.setText("Welcome!");
+
+        textPane2.setFont(new Font("Dialog",0,17));
+        textPane2.setEditable(false);
+        textPane2.setText("Press play to start.");
+
 
         for (JButton b : gameButtons)
             b.setPreferredSize(new Dimension(50,50));
 
         buttonPanel.add(startButton);
+        buttonPanel.setPreferredSize(new Dimension(-1,150));
 
-        setSize(300,500);
-//        pack();
+        setSize(500,600);
+
         setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setResizable(false);
     }
 
-    private void setTextAlignment(){
+    private void setTextAlignment(JTextPane textPane){
         StyledDocument doc = textPane.getStyledDocument();
         SimpleAttributeSet center = new SimpleAttributeSet();
         StyleConstants.setAlignment(center, StyleConstants.ALIGN_CENTER);
@@ -124,6 +133,10 @@ public class QuizCampGUI extends JFrame {
 
     public JTextPane getTextPane(){
         return textPane;
+    }
+
+    public JTextPane getTextPane2(){
+        return textPane2;
     }
 
     public JLabel getPlayerLabel(){

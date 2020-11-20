@@ -42,6 +42,7 @@ public class Server extends Thread {
             // tillfällig lösning för att testa.
             if (pair.readyToPlay()) {
 //                pair.writeToClients("paired");
+                System.out.println("par");
                 game.startGame();
             }
             while (true) {
@@ -56,9 +57,5 @@ public class Server extends Thread {
                 pair.removeClient(out);
             }
         }
-//        finally {
-//            counter--;
-//            pairList.remove(pair);
-//        }
     }
 }
