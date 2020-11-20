@@ -1,15 +1,20 @@
-package controller;
+package client.controller;
 
 
-import view.QuizCampGUI;
-import model.*;
+import client.view.QuizCampGUI;
+import model.Category;
+import model.CategoryProtocol;
+import model.GameUpdater;
+import model.Question;
 
 import javax.swing.*;
+
 import java.awt.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -30,7 +35,8 @@ public class ClientHandler {
     private JPanel buttonPanel;
     private JButton[] gameButtons;
     private JButton startButton;
-    private JTextPane textPane;
+    private JTextPane questionText;
+    private JTextPane categoryText;
     private JLabel playerLabel;
     private JLabel opponentLabel;
 
@@ -42,6 +48,10 @@ public class ClientHandler {
     private Thread sendToServerThread;
     private Thread receiveFromServerThread;
 
+    private CategoryProtocol protocol;
+
+    private GameUpdater gameUpdater;
+
     ClientHandler() {} // temp
 
     public ClientHandler(QuizCampGUI gui) {
@@ -49,9 +59,11 @@ public class ClientHandler {
         this.gameButtons = gui.getGameButtons();
         this.buttonPanel = gui.getButtonPanel();
         this.startButton = gui.getStartButton();
-        this.textPane = gui.getTextPane();
+        this.questionText = gui.getTextPane2();
+        this.categoryText = gui.getTextPane();
         this.playerLabel = gui.getPlayerLabel();
         this.opponentLabel = gui.getOpponentLabel();
+
     }
 
     public void startButton() {
@@ -68,6 +80,25 @@ public class ClientHandler {
         buttonPanel.updateUI();
     }
 
+    private void setCategoryText(){
+        categoryText.setText(protocol.getCategoryName());
+    }
+
+    private void updateQuestion(){
+        Question question = protocol.getQuestion();
+        if(question == null){
+            sendToServer(gameUpdater);
+            return;
+        }
+        List<String> answers = question.getShuffledAnswers();
+
+        for (int i = 0; i < gameButtons.length; i++){
+            gameButtons[i].setText(answers.get(i));
+        }
+        questionText.setText(question.questionText);
+
+    }
+
     public void connectToServer() {
         connectSocket();
         if (socket != null)
@@ -82,11 +113,15 @@ public class ClientHandler {
                         System.out.println("Tar emot: " + input);
 
                         // tillfällig lösning för att testa.
-//                        if (input instanceof String) {
-//                            if (input.equals("paired"))
-//                                switchToGameButtons();
-//                        }
-//
+                        if (input instanceof GameUpdater) {
+                                switchToGameButtons();
+                                gameUpdater = (GameUpdater) input;
+                                Category category = gameUpdater.getCategory();
+                                protocol = new CategoryProtocol(category);
+                                setCategoryText();
+                                updateQuestion();
+                        }
+
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
