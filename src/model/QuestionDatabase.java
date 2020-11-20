@@ -11,7 +11,7 @@ import java.util.List;
  * Time: 11:15 <br>
  * Project: IntelliJ IDEA <br>
  */
-public class QuestionGenerator implements Serializable {
+public class QuestionDatabase implements Serializable {
     List<Category> categoryList = new ArrayList<>();
 
 
@@ -76,7 +76,7 @@ public class QuestionGenerator implements Serializable {
         return outList;
     }
 
-    public QuestionGenerator() {
+    public QuestionDatabase() {
         addCategories();
     }
 

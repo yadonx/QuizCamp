@@ -1,7 +1,7 @@
 package server;
 
 import model.Category;
-import model.QuestionGenerator;
+import model.QuestionDatabase;
 
 
 
@@ -23,8 +23,8 @@ public class Game {
 
         client1Out = pair.get(0);
         client2Out = pair.get(1);
-        QuestionGenerator questionGenerator = new QuestionGenerator();
-        questions = questionGenerator.getShuffledCategories(3);
+        QuestionDatabase questionDatabase = new QuestionDatabase();
+        questions = questionDatabase.getShuffledCategories(3);
     }
 
 
