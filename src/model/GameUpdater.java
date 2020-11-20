@@ -50,4 +50,16 @@ public class GameUpdater implements Serializable {
     public void setReady(boolean ready){
         this.ready = ready;
     }
+
+    public void setCategory(Category category){
+        this.category = category;
+    }
+
+    public Category getCategory(){
+        return category;
+    }
+
+    public void increaseClientScore(){
+        clientScore++;
+    }
 }
