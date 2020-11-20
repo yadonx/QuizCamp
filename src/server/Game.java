@@ -1,6 +1,7 @@
 package server;
 
 
+import model.Category;
 import model.GameUpdater;
 import model.Pair;
 
@@ -45,7 +46,14 @@ public class Game {
     }
 
     public void startGame() {
+        updateCategories();
         pair.writeGameUpdaters(updater1, updater2);
+    }
+
+    public void updateCategories(){
+        Category category = protocol.getCategory();
+        updater1.setCategory(category);
+        updater2.setCategory(category);
     }
 
     public void gameUpdate() {
@@ -55,6 +63,7 @@ public class Game {
         updater2.setOpponentScore(score1);
         updater1.setReady(false);
         updater2.setReady(false);
+        updateCategories();
         pair.writeGameUpdaters(updater1, updater2);
 
     }
