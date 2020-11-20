@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.List;
 
 /**
  * Created by Emil Johansson
@@ -37,20 +36,19 @@ public class Server extends Thread {
             in = new ObjectInputStream(socket.getInputStream());
 
             pair.addClient(out);
-//            game = new Game(pair);
+            game = pair.getGame();
             Object input = null;
 
             // tillfällig lösning för att testa.
             if (pair.readyToPlay()) {
-                pair.writeToClients("paired");
+//                pair.writeToClients("paired");
+                game.startGame();
             }
             while (true) {
                    input = in.readObject();
-
-                System.out.println(input);
-
-                int test = 1;
-                pair.writeToClients(input);
+                   game.checkInputObject(input);
+//                int test = 1;
+//                pair.writeToClients(input);
             }
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();

@@ -1,5 +1,7 @@
 package model;
 
+import server.Game;
+
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 
@@ -12,6 +14,7 @@ import java.io.ObjectOutputStream;
 public class Pair {
     private ObjectOutputStream client1;
     private ObjectOutputStream client2;
+    private Game game = new Game(this);
 
     public Pair(){}
 
@@ -23,13 +26,10 @@ public class Pair {
 
         if (!client1Exists() && !client2Exists()){
             client1 = client;
-            System.out.println("första");
         } else if (client1Exists()){
             client2 = client;
-            System.out.println("andra");
         } else if (client2Exists()){
             client1 = client;
-            System.out.println("första");
         }
     }
 
@@ -44,7 +44,6 @@ public class Pair {
             client2 = null;
         }
     }
-
 
     private boolean client1Exists(){
         return client1 != null;
@@ -71,4 +70,16 @@ public class Pair {
         }
     }
 
+    public void writeGameUpdaters(Object output1,Object output2){
+        try {
+            client1.writeObject(output1);
+            client2.writeObject(output2);
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    public Game getGame(){
+        return game;
+    }
 }

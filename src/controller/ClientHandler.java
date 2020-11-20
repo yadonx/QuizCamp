@@ -82,10 +82,11 @@ public class ClientHandler {
                         System.out.println("Tar emot: " + input);
 
                         // tillfällig lösning för att testa.
-                        if (input instanceof String) {
-                            if (input.equals("paired"))
-                                switchToGameButtons();
-                        }
+//                        if (input instanceof String) {
+//                            if (input.equals("paired"))
+//                                switchToGameButtons();
+//                        }
+//
                     }
 
                 } catch (IOException | ClassNotFoundException e) {

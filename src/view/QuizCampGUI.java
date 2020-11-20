@@ -33,7 +33,7 @@ public class QuizCampGUI extends JFrame {
     private JPanel scorePanel1 = new JPanel();
     private JPanel scorePanel2 = new JPanel();
 
-    private JTextPane textPane = new JTextPane();
+    private final JTextPane textPane = new JTextPane();
 
     private JLabel scoreLabel = new JLabel("Score");
     private JLabel playerLabel = new JLabel("0");
