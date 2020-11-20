@@ -20,13 +20,13 @@ public class Category implements Serializable {
 
     public List<Question> getShuffledQuestions(int amount){
         List<Question> tempList = new ArrayList<>(questionList);
-        //tempList.remove(0);
+        //tempList.remove(0);                                         //TODO vet inte vad det här är hehe // viktor
         Collections.shuffle(tempList);
         List<Question> outList = new ArrayList<>();
         for (int i = 0; i < amount; i++){
             outList.add(tempList.get(i));
         }
-        shuffledList = outList;
+        shuffledList = outList;   //TODO lite lustigt, ta en titt på sen. tekniskt sett kanske void, retur används inte
         return outList;
     }
 
