@@ -51,6 +51,7 @@ public class ClientHandler {
     private CategoryProtocol protocol;
 
     private GameUpdater gameUpdater;
+    private Question question;
 
     ClientHandler() {} // temp
 
@@ -85,7 +86,8 @@ public class ClientHandler {
     }
 
     private void updateQuestion(){
-        Question question = protocol.getQuestion();
+
+        question = protocol.getQuestion();
         if(question == null){
             sendToServer(gameUpdater);
             return;
@@ -98,6 +100,16 @@ public class ClientHandler {
         questionText.setText(question.questionText);
 
     }
+
+    public void checkAnswer(String input){
+        if (input.equalsIgnoreCase(question.getCorrectAnswer())){
+            gameUpdater.increaseClientScore();
+            playerLabel.setText("" + gameUpdater.getClientScore());
+        }
+        updateQuestion();
+    }
+
+
 
     public void connectToServer() {
         connectSocket();
@@ -116,8 +128,12 @@ public class ClientHandler {
                         if (input instanceof GameUpdater) {
                                 switchToGameButtons();
                                 gameUpdater = (GameUpdater) input;
+                                if (gameUpdater.getCategory() == null){
+                                    //TODO Game finished here
+                                }
                                 Category category = gameUpdater.getCategory();
                                 protocol = new CategoryProtocol(category);
+                                opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
                                 setCategoryText();
                                 updateQuestion();
                         }

@@ -44,6 +44,9 @@ public class GameProtocol {
     }
 
     public Category getCategory(){
+        if(categoryList.size() <= currentCategory){
+            return null;
+        }
         Category temp = categoryList.get(currentCategory);
         temp.getShuffledQuestions(questions);
         currentCategory++;

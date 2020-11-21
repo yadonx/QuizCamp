@@ -50,7 +50,8 @@ public class QuizCampGUI extends JFrame {
         });
 
         ActionListener gameButtonListener = e -> {
-            System.out.println(e.getActionCommand());
+            //System.out.println(e.getActionCommand());
+            clientHandler.checkAnswer(e.getActionCommand());
         };
         for (JButton e : gameButtons)
             e.addActionListener(gameButtonListener);

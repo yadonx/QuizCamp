@@ -23,4 +23,8 @@ public class Question implements Serializable {
         Collections.shuffle(answerList);
         return answerList;
     }
+
+    public String getCorrectAnswer(){
+        return correctAnswer;
+    }
 }
