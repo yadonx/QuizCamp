@@ -44,6 +44,7 @@ public class ClientHandler {
     private String opponentsName;
 
     private ObjectOutputStream outputStream;
+    private ObjectInputStream in;
 
     private Thread sendToServerThread;
     private Thread receiveFromServerThread;
@@ -53,7 +54,8 @@ public class ClientHandler {
     private GameUpdater gameUpdater;
     private Question question;
 
-    ClientHandler() {} // temp
+    ClientHandler() {
+    } // temp
 
     public ClientHandler(QuizCampGUI gui) {
         this.gui = gui;
@@ -81,34 +83,67 @@ public class ClientHandler {
         buttonPanel.updateUI();
     }
 
-    private void setCategoryText(){
+    private void waitForOtherPlayer() {
+        buttonPanel.removeAll();
+        categoryText.setText("");
+        questionText.setText("Wait for opponent to answer questions...");
+        buttonPanel.updateUI();
+    }
+
+    private void endTheGame() {
+        buttonPanel.removeAll();
+        categoryText.setText("");
+        int opponentScore = gameUpdater.getOpponentScore();
+        int clientScore = gameUpdater.getClientScore();
+        if (clientScore > opponentScore) {
+            questionText.setText("You win this game! Great job!");
+        } else if (clientScore < opponentScore) {
+            questionText.setText("Better luck next time...");
+        } else {
+            questionText.setText("Good job! you both where equally strong!");
+        }
+
+        try {
+            in.close();
+            outputStream.close();
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        startButton.setText("Play again");
+        buttonPanel.add(startButton);
+        buttonPanel.updateUI();
+    }
+
+    private void setCategoryText() {
         categoryText.setText(protocol.getCategoryName());
     }
 
-    private void updateQuestion(){
+    private void updateQuestion() {
 
         question = protocol.getQuestion();
-        if(question == null){
+        if (question == null) {
+            waitForOtherPlayer();
             sendToServer(gameUpdater);
             return;
         }
         List<String> answers = question.getShuffledAnswers();
 
-        for (int i = 0; i < gameButtons.length; i++){
+        for (int i = 0; i < gameButtons.length; i++) {
             gameButtons[i].setText(answers.get(i));
         }
         questionText.setText(question.questionText);
 
     }
 
-    public void checkAnswer(String input){
-        if (input.equalsIgnoreCase(question.getCorrectAnswer())){
+    public void checkAnswer(String input) {
+        if (input.equalsIgnoreCase(question.getCorrectAnswer())) {
             gameUpdater.increaseClientScore();
             playerLabel.setText("" + gameUpdater.getClientScore());
         }
         updateQuestion();
     }
-
 
 
     public void connectToServer() {
@@ -117,7 +152,7 @@ public class ClientHandler {
             receiveFromServerThread = new Thread(() -> {
 
                 try {
-                    ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+                    in = new ObjectInputStream(socket.getInputStream());
                     Object input;
 
                     while (true) {
@@ -126,16 +161,18 @@ public class ClientHandler {
 
                         // tillfällig lösning för att testa.
                         if (input instanceof GameUpdater) {
-                                switchToGameButtons();
-                                gameUpdater = (GameUpdater) input;
-                                if (gameUpdater.getCategory() == null){
-                                    //TODO Game finished here
-                                }
+                            switchToGameButtons();
+                            gameUpdater = (GameUpdater) input;
+                            opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
+                            if (gameUpdater.getCategory() == null) {
+                                endTheGame();
+                                return;
+                            } else {
                                 Category category = gameUpdater.getCategory();
                                 protocol = new CategoryProtocol(category);
-                                opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
                                 setCategoryText();
                                 updateQuestion();
+                            }
                         }
 
                     }
@@ -169,8 +206,6 @@ public class ClientHandler {
             });
         sendToServerThread.start();
     }
-
-
 
 
     public static void main(String[] args) {
