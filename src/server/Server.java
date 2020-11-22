@@ -3,6 +3,7 @@ package server;
 
 import model.Pair;
 
+import javax.xml.crypto.dsig.spec.ExcC14NParameterSpec;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -39,7 +40,7 @@ public class Server extends Thread {
 
             pair.addClient(out);
             game = pair.getGame();
-            Object input = null;
+            Object input;
 
             if (pair.readyToPlay()) {
 
@@ -47,16 +48,24 @@ public class Server extends Thread {
             }
             while (true) {
                    input = in.readObject();
-                   game.checkInputObject(input);
+                   if (input instanceof String){
+                       break;
+                   }else {
+                       game.checkInputObject(input);
+                   }
 
             }
-        } catch (IOException | ClassNotFoundException e) {
-            if (e.getMessage().equals("Connection reset")) {
-                pair.whenClientDisconnect(out);
-                pair.removeClient(out);
-            } else {
-                e.printStackTrace();
-            }
+        } catch (SocketException e){
+            if (e.getMessage().equals("Connection reset"))
+            System.out.println("Client disconnected");
+            else e.printStackTrace();
+        } catch (Exception e) {
+            System.out.println("End of Thread: " + e.getMessage());
         }
+        finally {
+            pair.whenClientDisconnect(out);
+            pair.removeClient(out);
+        }
+
     }
 }
