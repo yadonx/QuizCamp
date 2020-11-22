@@ -3,6 +3,7 @@ package server;
 
 import model.Pair;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -39,22 +40,21 @@ public class Server extends Thread {
             game = pair.getGame();
             Object input = null;
 
-            // tillfällig lösning för att testa.
             if (pair.readyToPlay()) {
-//                pair.writeToClients("paired");
-                System.out.println("par");
+
                 game.startGame();
             }
             while (true) {
                    input = in.readObject();
                    game.checkInputObject(input);
-//                int test = 1;
-//                pair.writeToClients(input);
+
             }
         } catch (IOException | ClassNotFoundException e) {
-            e.printStackTrace();
             if (e.getMessage().equals("Connection reset")) {
+                pair.whenClientDisconnect(out);
                 pair.removeClient(out);
+            } else {
+                e.printStackTrace();
             }
         }
     }

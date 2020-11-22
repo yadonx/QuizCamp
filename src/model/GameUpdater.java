@@ -11,8 +11,8 @@ import java.io.Serializable;
  */
 public class GameUpdater implements Serializable {
     Category category;
-    int clientScore = 0;
-    int opponentScore = 0;
+    private int clientScore = 0;
+    private int opponentScore = 0;
     private boolean ready;
     private int id;
     public static final int CLIENT_1 = 1;

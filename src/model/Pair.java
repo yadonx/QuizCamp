@@ -3,6 +3,7 @@ package model;
 import server.Game;
 
 import java.io.IOException;
+import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
 /**
@@ -59,6 +60,19 @@ public class Pair {
 
     public ObjectOutputStream getClient2() {
         return client2;
+    }
+
+    public void whenClientDisconnect(ObjectOutputStream out){
+            try {
+                if (out == client1 && client2Exists()){
+                    client2.writeObject("Disconnected");
+                } else if (out == client2 && client1Exists()) {
+                    client1.writeObject("Disconnected");
+                }
+
+            }catch (IOException e){
+                e.printStackTrace();
+            }
     }
 
     public void writeToClients(Object output){

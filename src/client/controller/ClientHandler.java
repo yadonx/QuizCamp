@@ -54,6 +54,9 @@ public class ClientHandler {
     private GameUpdater gameUpdater;
     private Question question;
 
+    public static final int GAME_FINISHED = 1;
+    public static final int CLIENT_DISCONNECTED = 2;
+
     ClientHandler() {
     } // temp
 
@@ -70,6 +73,8 @@ public class ClientHandler {
     }
 
     public void startButton() {
+        playerLabel.setText("0");
+        opponentLabel.setText("0");
         buttonPanel.removeAll();
         buttonPanel.add(new JLabel("Searching for opponent..."));
         buttonPanel.updateUI();
@@ -90,19 +95,7 @@ public class ClientHandler {
         buttonPanel.updateUI();
     }
 
-    private void endTheGame() {
-        buttonPanel.removeAll();
-        categoryText.setText("");
-        int opponentScore = gameUpdater.getOpponentScore();
-        int clientScore = gameUpdater.getClientScore();
-        if (clientScore > opponentScore) {
-            questionText.setText("You win this game! Great job!");
-        } else if (clientScore < opponentScore) {
-            questionText.setText("Better luck next time...");
-        } else {
-            questionText.setText("Good job! you both where equally strong!");
-        }
-
+    private void endTheGame(int gameState) {
         try {
             in.close();
             outputStream.close();
@@ -110,6 +103,22 @@ public class ClientHandler {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        buttonPanel.removeAll();
+        categoryText.setText("");
+        int opponentScore = gameUpdater.getOpponentScore();
+        int clientScore = gameUpdater.getClientScore();
+        if(gameState == CLIENT_DISCONNECTED){
+            questionText.setText("Your opponent has left the game. YOU WIN!");
+        }
+        else if (clientScore > opponentScore) {
+            questionText.setText("You win this game! Great job!");
+        } else if (clientScore < opponentScore) {
+            questionText.setText("Better luck next time...");
+        } else {
+            questionText.setText("Good job! you both where equally strong!");
+        }
+
+
         buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         startButton.setText("Play again");
         buttonPanel.add(startButton);
@@ -165,7 +174,7 @@ public class ClientHandler {
                             gameUpdater = (GameUpdater) input;
                             opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
                             if (gameUpdater.getCategory() == null) {
-                                endTheGame();
+                                endTheGame(GAME_FINISHED);
                                 return;
                             } else {
                                 Category category = gameUpdater.getCategory();
@@ -173,12 +182,20 @@ public class ClientHandler {
                                 setCategoryText();
                                 updateQuestion();
                             }
+                        } else if (input instanceof String){
+                            if (input.toString().equals("Disconnected")){
+                                endTheGame(CLIENT_DISCONNECTED);
+                            }
                         }
 
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
+                    if (e.getMessage().equals("Socket closed")){
+                        System.out.println("Disconnected");
+                    }else {
+                        e.printStackTrace();
+                    }
                 }
             });
         receiveFromServerThread.start();
