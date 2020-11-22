@@ -57,8 +57,6 @@ public class ClientHandler {
     public static final int GAME_FINISHED = 1;
     public static final int CLIENT_DISCONNECTED = 2;
 
-    ClientHandler() {
-    } // temp
 
     public ClientHandler(QuizCampGUI gui) {
         this.gui = gui;
@@ -96,12 +94,13 @@ public class ClientHandler {
     }
 
     private void endTheGame(int gameState) {
+        sendToServer("Game over");
         try {
             in.close();
             outputStream.close();
             socket.close();
         } catch (IOException e) {
-            e.printStackTrace();
+            socketIsClosed(e);
         }
         buttonPanel.removeAll();
         categoryText.setText("");
@@ -109,6 +108,7 @@ public class ClientHandler {
         int clientScore = gameUpdater.getClientScore();
         if(gameState == CLIENT_DISCONNECTED){
             questionText.setText("Your opponent has left the game. YOU WIN!");
+
         }
         else if (clientScore > opponentScore) {
             questionText.setText("You win this game! Great job!");
@@ -168,7 +168,6 @@ public class ClientHandler {
                         input = in.readObject();
                         System.out.println("Tar emot: " + input);
 
-                        // tillfällig lösning för att testa.
                         if (input instanceof GameUpdater) {
                             switchToGameButtons();
                             gameUpdater = (GameUpdater) input;
@@ -191,11 +190,7 @@ public class ClientHandler {
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
-                    if (e.getMessage().equals("Socket closed")){
-                        System.out.println("Disconnected");
-                    }else {
-                        e.printStackTrace();
-                    }
+                    socketIsClosed(e);
                 }
             });
         receiveFromServerThread.start();
@@ -211,28 +206,24 @@ public class ClientHandler {
 
     }
 
+    private void socketIsClosed(Exception exception){
+        if (exception.getMessage().equals("Socket closed")){
+            System.out.println("Disconnected");
+        } else exception.printStackTrace();
+    }
+
     private void sendToServer(Object output) {
-        if (socket != null)
+
             sendToServerThread = new Thread(() -> {
                 try {
-                    outputStream.writeObject(output);
-                    System.out.println("Skickar: " + output.toString());
+                        outputStream.writeObject(output);
+                        System.out.println("Skickar: " + output.toString());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    socketIsClosed(e);
                 }
             });
+        if (socket != null)
         sendToServerThread.start();
     }
 
-
-    public static void main(String[] args) {
-        ClientHandler ch = new ClientHandler();
-        ch.connectToServer();
-
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            String s = sc.nextLine();
-            ch.sendToServer(s);
-        }
-    }
 }

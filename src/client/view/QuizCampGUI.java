@@ -17,10 +17,6 @@ import java.awt.event.ActionListener;
  */
 public class QuizCampGUI extends JFrame {
 
-//    private JButton gameButton1 = new JButton("Button 1");
-//    private JButton gameButton2 = new JButton("Button 2");
-//    private JButton gameButton3 = new JButton("Button 3");
-//    private JButton gameButton4 = new JButton("Button 4");
     private JButton[] gameButtons = new JButton[]{new JButton("k1"),new JButton("k2"),
             new JButton("k3"), new JButton("k4")};
 
@@ -50,7 +46,6 @@ public class QuizCampGUI extends JFrame {
         });
 
         ActionListener gameButtonListener = e -> {
-            //System.out.println(e.getActionCommand());
             clientHandler.checkAnswer(e.getActionCommand());
         };
         for (JButton e : gameButtons)

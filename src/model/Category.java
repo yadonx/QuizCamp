@@ -18,7 +18,7 @@ public class Category implements Serializable {
         questionList.add(question);
     }
 
-    public List<Question> getShuffledQuestions(int amount){
+    public void getShuffledQuestions(int amount){
         List<Question> tempList = new ArrayList<>(questionList);
         //tempList.remove(0);                                         //TODO vet inte vad det här är hehe // viktor
         Collections.shuffle(tempList);
@@ -26,8 +26,7 @@ public class Category implements Serializable {
         for (int i = 0; i < amount; i++){
             outList.add(tempList.get(i));
         }
-        shuffledList = outList;   //TODO lite lustigt, ta en titt på sen. tekniskt sett kanske void, retur används inte
-        return outList;
+        shuffledList = outList;
     }
 
 }

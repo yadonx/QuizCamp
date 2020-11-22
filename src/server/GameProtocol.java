@@ -37,10 +37,8 @@ public class GameProtocol {
         rounds = Integer.parseInt(roundProperties.getProperty("round"));
         questions = Integer.parseInt(questionProperties.getProperty("questions"));
 
-        System.out.println(rounds);
-
         questionDatabase = new QuestionDatabase();
-        categoryList = questionDatabase.getShuffledCategories(rounds);//Todo fixa med Properties.
+        categoryList = questionDatabase.getShuffledCategories(rounds);
     }
 
     public Category getCategory(){

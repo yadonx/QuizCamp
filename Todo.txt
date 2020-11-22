@@ -23,50 +23,50 @@ som möjligt.
 
 Backlog
 
-Det ska vara minst 4 frågor per spel.(OBL)
+Det ska vara minst 4 frågor per spel.(OBL) KLAR
 
-Frågorna ska vara indelade i olika ämneskategorier. (OBL)
+Frågorna ska vara indelade i olika ämneskategorier. (OBL) KLAR
 
 Frågorna i spelet ska vara uppdelade i ronder med initialt 2 frågor/rond så att vi sammanlagt
-har 2 ronder/spel och sammanlagt 4 frågor/spel. (OBL)
+har 2 ronder/spel och sammanlagt 4 frågor/spel. (OBL) KLAR
 
 Det ska gå att ställa in hur många frågor som ska finnas i en rond och hur många ronder som
-ska ingå i ett spel, via en Properties-fil. (OBL)
+ska ingå i ett spel, via en Properties-fil. (OBL) KLAR
 
-De frågor som ingår i samma rond ska tillhöra samma kategori. (OBL)
+De frågor som ingår i samma rond ska tillhöra samma kategori. (OBL) KLAR
 
-Programmet ska hålla reda på antal poäng som en användare har per rond. (OBL)
+Programmet ska hålla reda på antal poäng som en användare har per rond. (OBL) KLAR
 
 En användare ska kunna ansöka om att få spela från klienten (kan ske implicit när klienten
 startas). När servern har mottagit ”spelansökningar” från två olika klienter sätts ett spel
 igång och dessa två användare får spela mot varandra. Alternativt, när en spelare ansluter
 börjar hens spel och hen får svara på den första rundan frågor tills vidare, när nästa spelare
 ansluter blir hen inkopplad i det påbörjade spelet och får göra frågorna i rond 1. (se ”Spel
-mot slumpad spelare” i riktiga Quizkampen) (OBL)
+mot slumpad spelare” i riktiga Quizkampen) (OBL) KLAR
 
 Man ska kunna vara två spelare per spel som spelar mot varandra och turas om att svara på
-frågorna i en rond på ett koordinerat sätt. (OBL)
+frågorna i en rond på ett koordinerat sätt. (OBL) KLAR
 
 Klientapplikationen ska ha ett grafiskt interface där varje fråga och de fyra svarsalternativen
 visas. Svarsalternativen visas på var sin knapp. När användaren trycker på en knapp ska den
 byta färg och för att markera om användaren svarade rätt eller fel. GUI:t måste inte likna
-den riktiga Quizkampen, ni har konstnärlig frihet att låta appen se hur hur ni vill (OBL)
+den riktiga Quizkampen, ni har konstnärlig frihet att låta appen se hur hur ni vill (OBL) //TODO
 
-Godtyckligt antal spelare ska kunna spela parallellt, två och två. (OBL)
+Godtyckligt antal spelare ska kunna spela parallellt, två och två. (OBL) KLAR
 
 När en användare börjar spela i en rond ska användarens resultat för ronden vara dolt för
-motståndaren tills motståndaren också har svarat. (OBL)
+motståndaren tills motståndaren också har svarat. (OBL) KLAR
 
 När en användares motståndare börjar spela i en rond ska motståndarens resultat för
-ronden vara dolt för användaren tills användaren har svarat klart. (OBL)
+ronden vara dolt för användaren tills användaren har svarat klart. (OBL) KLAR
 
-När ett spel avslutas ska bägge spelare kunna se resultat för bägge spelare. (OBL)
-
-När bägge spelare har spelat en rond ska bägge spelare få se bägge spelares resultat för
-ronden. (OBL)
+När ett spel avslutas ska bägge spelare kunna se resultat för bägge spelare. (OBL) KLAR
 
 När bägge spelare har spelat en rond ska bägge spelare få se bägge spelares resultat för
-denna rond och för tidigare spelade ronder i detta spel. (OBL)
+ronden. (OBL) KLAR
+
+När bägge spelare har spelat en rond ska bägge spelare få se bägge spelares resultat för
+denna rond och för tidigare spelade ronder i detta spel. (OBL) //TODO kanske
 
 Det ska finnas en ”Ge Upp”-knapp som avbryter en användares spel (jmf. den vita flaggan
 längst upp till höger i riktiga Qiuz-kampen).
