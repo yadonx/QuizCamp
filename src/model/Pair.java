@@ -46,11 +46,11 @@ public class Pair {
         }
     }
 
-    private boolean client1Exists(){
+    public boolean client1Exists(){
         return client1 != null;
     }
 
-    private boolean client2Exists(){
+    public boolean client2Exists(){
         return client2 != null;
     }
 

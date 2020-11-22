@@ -32,8 +32,12 @@ public class ServerListener {
                 final Socket socket = serverSocket.accept();
                 Server clientSocket = new Server(socket, pairList.get(pairList.size()-1));
                 if (clients == 2) {
-                    pairList.remove(pairList.size()-1);
-                    clients = 0;
+                    if(pairList.get(pairList.size()-1).client1Exists()) {
+                        pairList.remove(pairList.size() - 1);
+                        clients = 0;
+                    } else {
+                        clients = 1;
+                    }
                 }
                 clients++;
                 clientSocket.start();
