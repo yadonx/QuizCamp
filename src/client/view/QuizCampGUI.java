@@ -21,6 +21,7 @@ public class QuizCampGUI extends JFrame {
             new JButton("k3"), new JButton("k4")};
 
     private JButton startButton = new JButton("Play");
+    private JButton nextButton = new JButton("Next");
 
     private JPanel topPanel = new JPanel();
     private JPanel questionPanel = new JPanel();
@@ -46,8 +47,19 @@ public class QuizCampGUI extends JFrame {
         });
 
         ActionListener gameButtonListener = e -> {
-            clientHandler.checkAnswer(e.getActionCommand());
+            if (clientHandler.checkAnswer(e.getActionCommand()))
+                ((JButton) e.getSource()).setBackground(Color.green);
+            else
+                ((JButton) e.getSource()).setBackground(Color.red);
+
+            nextButton.setVisible(true);
         };
+
+        nextButton.addActionListener( e -> {
+            clientHandler.updateQuestion();
+            nextButton.setVisible(false);
+        });
+
         for (JButton e : gameButtons)
             e.addActionListener(gameButtonListener);
     }
@@ -77,6 +89,7 @@ public class QuizCampGUI extends JFrame {
         scorePanel1.add(opponentLabel);
 
         questionPanel.setLayout(new BorderLayout());
+        questionPanel.add(nextButton, BorderLayout.SOUTH);
         questionPanel.add(textPane, BorderLayout.NORTH);
         questionPanel.add(textPane2, BorderLayout.CENTER);
         questionPanel.setBackground(Color.white);
@@ -99,6 +112,8 @@ public class QuizCampGUI extends JFrame {
 
         buttonPanel.add(startButton);
         buttonPanel.setPreferredSize(new Dimension(-1,150));
+
+        nextButton.setVisible(false);
 
         setSize(500,600);
 
@@ -141,6 +156,10 @@ public class QuizCampGUI extends JFrame {
 
     public JLabel getOpponentLabel(){
         return opponentLabel;
+    }
+
+    public JButton getNextButton() {
+        return nextButton;
     }
 
 

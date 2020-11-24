@@ -67,7 +67,6 @@ public class ClientHandler {
         this.categoryText = gui.getTextPane();
         this.playerLabel = gui.getPlayerLabel();
         this.opponentLabel = gui.getOpponentLabel();
-
     }
 
     public void startButton() {
@@ -129,7 +128,7 @@ public class ClientHandler {
         categoryText.setText(protocol.getCategoryName());
     }
 
-    private void updateQuestion() {
+    public void updateQuestion() {
 
         question = protocol.getQuestion();
         if (question == null) {
@@ -141,19 +140,20 @@ public class ClientHandler {
 
         for (int i = 0; i < gameButtons.length; i++) {
             gameButtons[i].setText(answers.get(i));
+            gameButtons[i].setBackground(UIManager.getColor("JButton.background"));
         }
         questionText.setText(question.questionText);
 
     }
 
-    public void checkAnswer(String input) {
+    public boolean checkAnswer(String input) {
         if (input.equalsIgnoreCase(question.getCorrectAnswer())) {
             gameUpdater.increaseClientScore();
             playerLabel.setText("" + gameUpdater.getClientScore());
-        }
-        updateQuestion();
+            return true;
+        } else
+            return false;
     }
-
 
     public void connectToServer() {
         connectSocket();
