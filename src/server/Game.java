@@ -10,6 +10,7 @@ public class Game {
 
 
     private int score1, score2;
+    private String name1, name2;
 
     private Pair pair;
     private GameUpdater updater1 = new GameUpdater();
@@ -38,6 +39,9 @@ public class Game {
             }
 
             if (updater1.ready() && updater2.ready()) {
+                if (updater1.getOpponentName() == null && updater2.getOpponentName() == null){
+                    updateName();
+                }
                 gameUpdate();
             }
 
@@ -64,6 +68,15 @@ public class Game {
         updater1.setReady(false);
         updater2.setReady(false);
         updateCategories();
+        pair.writeGameUpdaters(updater1, updater2);
+
+    }
+
+    public void updateName() {
+        name1 = updater1.getClientName();
+        name2 = updater2.getClientName();
+        updater1.setOpponentName(name2);
+        updater2.setOpponentName(name1);
         pair.writeGameUpdaters(updater1, updater2);
 
     }

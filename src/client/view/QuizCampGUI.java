@@ -38,14 +38,18 @@ public class QuizCampGUI extends JFrame {
     private JLabel playerLabel = new JLabel("0");
     private JLabel opponentLabel = new JLabel("0");
     private JLabel vsLabel = new JLabel(" VS ");
+    private JLabel playerNameLabel = new JLabel("Player");
+    private JLabel opponentNameLabel = new JLabel("Opponent");
 
 
     public QuizCampGUI(){
         frame();
         ClientHandler clientHandler = new ClientHandler(this);
         startButton.addActionListener(e -> {
-            clientHandler.startButton();
-            clientHandler.connectToServer();
+            if (!nameField.getText().isEmpty()){
+                clientHandler.startButton();
+                clientHandler.connectToServer();
+            }
         });
 
         ActionListener gameButtonListener = e -> {
@@ -87,9 +91,9 @@ public class QuizCampGUI extends JFrame {
         topPanel.add(scorePanel2);
         topPanel.add(scorePanel1);
 
-        scorePanel2.add(new JLabel("Player"));
+        scorePanel2.add(playerNameLabel);
         scorePanel2.add(vsLabel);
-        scorePanel2.add(new JLabel("Opponent"));
+        scorePanel2.add(opponentNameLabel);
 
         scorePanel1.add(playerLabel);
         scorePanel1.add(scoreLabel);
@@ -164,6 +168,18 @@ public class QuizCampGUI extends JFrame {
 
     public JLabel getOpponentLabel(){
         return opponentLabel;
+    }
+
+    public JTextField getNameField() {
+        return nameField;
+    }
+
+    public JLabel getPlayerNameLabel() {
+        return playerNameLabel;
+    }
+
+    public JLabel getOpponentNameLabel() {
+        return opponentNameLabel;
     }
 
     public static void main(String[] args) {

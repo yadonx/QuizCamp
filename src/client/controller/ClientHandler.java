@@ -39,9 +39,9 @@ public class ClientHandler {
     private JTextPane categoryText;
     private JLabel playerLabel;
     private JLabel opponentLabel;
-
-    private String username;
-    private String opponentsName;
+    private JTextField nameField;
+    private JLabel opponentNameLabel;
+    private JLabel playerNameLabel;
 
     private ObjectOutputStream outputStream;
     private ObjectInputStream in;
@@ -67,9 +67,13 @@ public class ClientHandler {
         this.categoryText = gui.getTextPane();
         this.playerLabel = gui.getPlayerLabel();
         this.opponentLabel = gui.getOpponentLabel();
+        this.nameField = gui.getNameField();
+        this.playerNameLabel = gui.getPlayerNameLabel();
+        this.opponentNameLabel = gui.getOpponentNameLabel();
     }
 
     public void startButton() {
+        playerNameLabel.setText(nameField.getText());
         playerLabel.setText("0");
         opponentLabel.setText("0");
         buttonPanel.removeAll();
@@ -171,6 +175,17 @@ public class ClientHandler {
                         if (input instanceof GameUpdater) {
                             switchToGameButtons();
                             gameUpdater = (GameUpdater) input;
+
+                            if (gameUpdater.getOpponentName() == null) {
+                                gameUpdater.setClientName(playerNameLabel.getText());
+                                sendToServer(gameUpdater);
+                                continue;
+                            }
+
+                            if (!gameUpdater.getOpponentName().equals(opponentNameLabel.getText())){
+                                opponentNameLabel.setText(gameUpdater.getOpponentName());
+                            }
+
                             opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
                             if (gameUpdater.getCategory() == null) {
                                 endTheGame(GAME_FINISHED);
