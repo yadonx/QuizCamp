@@ -29,6 +29,8 @@ public class QuizCampGUI extends JFrame {
     private JPanel scorePanel1 = new JPanel();
     private JPanel scorePanel2 = new JPanel();
 
+    private JTextField nameField = new JTextField(10);
+
     private final JTextPane textPane = new JTextPane();
     private final JTextPane textPane2 = new JTextPane();
 
@@ -109,12 +111,13 @@ public class QuizCampGUI extends JFrame {
 
         textPane2.setFont(new Font("Dialog",0,17));
         textPane2.setEditable(false);
-        textPane2.setText("Press play to start.");
+        textPane2.setText("Enter name. Press play to start.");
 
 
         for (JButton b : gameButtons)
             b.setPreferredSize(new Dimension(50,50));
 
+        buttonPanel.add(nameField);
         buttonPanel.add(startButton);
         buttonPanel.setPreferredSize(new Dimension(-1,150));
 
@@ -162,11 +165,6 @@ public class QuizCampGUI extends JFrame {
     public JLabel getOpponentLabel(){
         return opponentLabel;
     }
-
-    public JButton getNextButton() {
-        return nextButton;
-    }
-
 
     public static void main(String[] args) {
         new QuizCampGUI();
