@@ -47,6 +47,11 @@ public class QuizCampGUI extends JFrame {
         });
 
         ActionListener gameButtonListener = e -> {
+            for (JButton b : gameButtons) {
+                if (b.getBackground().equals(Color.green) || (b.getBackground().equals(Color.red))) {
+                    return;
+                }
+            }
             if (clientHandler.checkAnswer(e.getActionCommand()))
                 ((JButton) e.getSource()).setBackground(Color.green);
             else
