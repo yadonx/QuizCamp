@@ -46,9 +46,7 @@ public class Game {
             if (updater1.ready() && updater2.ready()) {
                     gameUpdate();
             }
-
         }
-
     }
 
     public void startGame() {

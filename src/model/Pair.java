@@ -84,21 +84,6 @@ public class Pair {
         }
     }
 
-    public void writeToClient(Object output, int id) {
-        try {
-            if (id == 1) {
-                System.out.println("writing to client 1");
-                client1.writeObject(output);
-            } else{
-                System.out.println("writing to client 2");
-                client2.writeObject(output);
-            }
-
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
     public void writeGameUpdaters(Object output1,Object output2){
         try {
             client1.writeObject(output1);
