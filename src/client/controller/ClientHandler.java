@@ -141,18 +141,26 @@ public class ClientHandler {
         for (int i = 0; i < gameButtons.length; i++) {
             gameButtons[i].setText(answers.get(i));
             gameButtons[i].setBackground(UIManager.getColor("JButton.background"));
+            gameButtons[i].setBorder(UIManager.getBorder("Button.border"));
         }
         questionText.setText(question.questionText);
 
     }
 
-    public boolean checkAnswer(String input) {
+    public void checkAnswer(String input) {
         if (input.equalsIgnoreCase(question.getCorrectAnswer())) {
             gameUpdater.increaseClientScore();
             playerLabel.setText("" + gameUpdater.getClientScore());
-            return true;
-        } else
-            return false;
+        }
+
+        for (int i = 0; i < gameButtons.length; i++) {
+            if (gameButtons[i].getText().equals(question.getCorrectAnswer()))
+                gameButtons[i].setBackground(Color.green);
+            else
+                gameButtons[i].setBackground(Color.red);
+        }
+
+
     }
 
     public void connectToServer() {

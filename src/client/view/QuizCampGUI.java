@@ -3,6 +3,7 @@ package client.view;
 import client.controller.ClientHandler;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -54,10 +55,10 @@ public class QuizCampGUI extends JFrame {
                     return;
                 }
             }
-            if (clientHandler.checkAnswer(e.getActionCommand()))
-                ((JButton) e.getSource()).setBackground(Color.green);
-            else
-                ((JButton) e.getSource()).setBackground(Color.red);
+
+            Border border = BorderFactory.createLineBorder(Color.blue, 5);
+            ((JButton) e.getSource()).setBorder(border);
+            clientHandler.checkAnswer(e.getActionCommand());
 
             nextButton.setVisible(true);
         };
