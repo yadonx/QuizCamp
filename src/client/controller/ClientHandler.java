@@ -245,6 +245,7 @@ public class ClientHandler {
                 try {
                     outputStream.reset();
                         outputStream.writeObject(output);
+                        outputStream.flush();
                         System.out.println("Skickar: " + output.toString());
                 } catch (IOException e) {
                     socketIsClosed(e);

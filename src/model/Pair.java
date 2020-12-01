@@ -89,7 +89,9 @@ public class Pair {
             client1.reset();
             client2.reset();
             client1.writeObject(output1);
+            client1.flush();
             client2.writeObject(output2);
+            client2.flush();
         }catch (IOException e){
             e.printStackTrace();
         }
