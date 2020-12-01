@@ -243,6 +243,7 @@ public class ClientHandler {
 
             sendToServerThread = new Thread(() -> {
                 try {
+                    outputStream.reset();
                         outputStream.writeObject(output);
                         System.out.println("Skickar: " + output.toString());
                 } catch (IOException e) {

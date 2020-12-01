@@ -86,6 +86,8 @@ public class Pair {
 
     public void writeGameUpdaters(Object output1,Object output2){
         try {
+            client1.reset();
+            client2.reset();
             client1.writeObject(output1);
             client2.writeObject(output2);
         }catch (IOException e){
