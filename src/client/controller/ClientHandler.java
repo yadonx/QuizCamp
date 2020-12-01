@@ -172,7 +172,7 @@ public class ClientHandler {
                 try {
                     in = new ObjectInputStream(socket.getInputStream());
                     Object input;
-
+/*
                     while (true) {
                         input = in.readObject();
                         gameUpdater = (GameUpdater) input;
@@ -182,16 +182,23 @@ public class ClientHandler {
                             sendToServer(gameUpdater);
                             break;
                         }
-
                     }
-
+*/
                     while (true) {
                         input = in.readObject();
                         System.out.println("Tar emot: " + input);
 
                         if (input instanceof GameUpdater) {
-                            switchToGameButtons();
                             gameUpdater = (GameUpdater) input;
+
+                            if (gameUpdater.getClientName() == null ){
+                                gameUpdater.setClientName(playerNameLabel.getText());
+                                sendToServer(gameUpdater);
+                                continue;
+                            }
+
+                            switchToGameButtons();
+
                             opponentNameLabel.setText(gameUpdater.getOpponentName());
                             opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
                             if (gameUpdater.getCategory() == null) {
