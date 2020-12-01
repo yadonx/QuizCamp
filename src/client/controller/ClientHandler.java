@@ -179,7 +179,6 @@ public class ClientHandler {
 
                         if (gameUpdater.getClientName() == null ){
                             gameUpdater.setClientName(playerNameLabel.getText());
-                            System.out.println("client " + gameUpdater.getClientName());
                             sendToServer(gameUpdater);
                             break;
                         }

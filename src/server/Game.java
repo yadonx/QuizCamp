@@ -43,9 +43,7 @@ public class Game {
                 }
                 updater2.setReady(true);
             }
-
             if (updater1.ready() && updater2.ready()) {
-                if (clientName2 != null && clientName1 != null)
                     gameUpdate();
             }
 
@@ -54,7 +52,6 @@ public class Game {
     }
 
     public void startGame() {
-        //updateCategories();
         pair.writeGameUpdaters(updater1, updater2);
     }
 
