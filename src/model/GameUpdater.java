@@ -13,6 +13,8 @@ public class GameUpdater implements Serializable {
     Category category;
     private int clientScore = 0;
     private int opponentScore = 0;
+    private String opponentName;
+    private String clientName;
     private boolean ready;
     private int id;
     public static final int CLIENT_1 = 1;
@@ -61,5 +63,21 @@ public class GameUpdater implements Serializable {
 
     public void increaseClientScore(){
         clientScore++;
+    }
+
+    public String getOpponentName() {
+        return opponentName;
+    }
+
+    public void setOpponentName(String name) {
+        opponentName = name;
+    }
+
+    public String getClientName() {
+        return clientName;
+    }
+
+    public void setClientName(String name) {
+        clientName = name;
     }
 }

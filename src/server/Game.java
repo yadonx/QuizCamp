@@ -10,6 +10,7 @@ public class Game {
 
 
     private int score1, score2;
+    private String clientName1, clientName2;
 
     private Pair pair;
     private GameUpdater updater1 = new GameUpdater();
@@ -31,14 +32,21 @@ public class Game {
         } else if (input instanceof GameUpdater) {
             if (((GameUpdater) input).getId() == GameUpdater.CLIENT_1) {
                 updater1 = (GameUpdater) input;
+                if (clientName1 == null) {
+                    clientName1 = updater1.getClientName();
+                }
                 updater1.setReady(true);
             } else if (((GameUpdater) input).getId() == GameUpdater.CLIENT_2) {
                 updater2 = (GameUpdater) input;
+                if (clientName2 == null) {
+                    clientName2 = updater2.getClientName();
+                }
                 updater2.setReady(true);
             }
 
             if (updater1.ready() && updater2.ready()) {
-                gameUpdate();
+                if (clientName2 != null && clientName1 != null)
+                    gameUpdate();
             }
 
         }
@@ -46,17 +54,20 @@ public class Game {
     }
 
     public void startGame() {
-        updateCategories();
+        //updateCategories();
         pair.writeGameUpdaters(updater1, updater2);
     }
 
-    public void updateCategories(){
+    public void updateCategories() {
         Category category = protocol.getCategory();
         updater1.setCategory(category);
         updater2.setCategory(category);
     }
 
     public void gameUpdate() {
+        updater1.setOpponentName(clientName2);
+        updater2.setOpponentName(clientName1);
+
         score1 = updater1.getClientScore();
         score2 = updater2.getClientScore();
         updater1.setOpponentScore(score2);

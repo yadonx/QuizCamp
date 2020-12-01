@@ -39,9 +39,8 @@ public class ClientHandler {
     private JTextPane categoryText;
     private JLabel playerLabel;
     private JLabel opponentLabel;
-
-    private String username;
-    private String opponentsName;
+    private JLabel playerNameLabel;
+    private JLabel opponentNameLabel;
 
     private ObjectOutputStream outputStream;
     private ObjectInputStream in;
@@ -67,6 +66,8 @@ public class ClientHandler {
         this.categoryText = gui.getTextPane();
         this.playerLabel = gui.getPlayerLabel();
         this.opponentLabel = gui.getOpponentLabel();
+        this.opponentNameLabel = gui.getOpponentNameLabel();
+        this.playerNameLabel = gui.getPlayerNameLabel();
     }
 
     public void startButton() {
@@ -174,11 +175,25 @@ public class ClientHandler {
 
                     while (true) {
                         input = in.readObject();
+                        gameUpdater = (GameUpdater) input;
+
+                        if (gameUpdater.getClientName() == null ){
+                            gameUpdater.setClientName(playerNameLabel.getText());
+                            System.out.println("client " + gameUpdater.getClientName());
+                            sendToServer(gameUpdater);
+                            break;
+                        }
+
+                    }
+
+                    while (true) {
+                        input = in.readObject();
                         System.out.println("Tar emot: " + input);
 
                         if (input instanceof GameUpdater) {
                             switchToGameButtons();
                             gameUpdater = (GameUpdater) input;
+                            opponentNameLabel.setText(gameUpdater.getOpponentName());
                             opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
                             if (gameUpdater.getCategory() == null) {
                                 endTheGame(GAME_FINISHED);
