@@ -47,6 +47,8 @@ public class QuizCampGUI extends JFrame {
         frame();
         ClientHandler clientHandler = new ClientHandler(this);
         startButton.addActionListener(e -> {
+            if (nameField.getText().isEmpty())
+                return;
             clientHandler.startButton();
             clientHandler.connectToServer();
             playerNameLabel.setText(nameField.getText());
