@@ -26,12 +26,12 @@ import java.util.Scanner;
  */
 
 public class ClientHandler {
+    public static final int GAME_FINISHED = 1;
+    public static final int CLIENT_DISCONNECTED = 2;
     private int port = 12345;
     private String ip = "127.0.0.1";
     private Socket socket;
-
     private QuizCampGUI gui;
-
     private JPanel buttonPanel;
     private JButton[] gameButtons;
     private JButton startButton;
@@ -39,23 +39,15 @@ public class ClientHandler {
     private JTextPane categoryText;
     private JLabel playerLabel;
     private JLabel opponentLabel;
-    private JTextField nameField;
-    private JLabel opponentNameLabel;
     private JLabel playerNameLabel;
-
+    private JLabel opponentNameLabel;
     private ObjectOutputStream outputStream;
     private ObjectInputStream in;
-
     private Thread sendToServerThread;
     private Thread receiveFromServerThread;
-
     private CategoryProtocol protocol;
-
     private GameUpdater gameUpdater;
     private Question question;
-
-    public static final int GAME_FINISHED = 1;
-    public static final int CLIENT_DISCONNECTED = 2;
 
 
     public ClientHandler(QuizCampGUI gui) {
@@ -67,13 +59,11 @@ public class ClientHandler {
         this.categoryText = gui.getTextPane();
         this.playerLabel = gui.getPlayerLabel();
         this.opponentLabel = gui.getOpponentLabel();
-        this.nameField = gui.getNameField();
-        this.playerNameLabel = gui.getPlayerNameLabel();
         this.opponentNameLabel = gui.getOpponentNameLabel();
+        this.playerNameLabel = gui.getPlayerNameLabel();
     }
 
     public void startButton() {
-        playerNameLabel.setText(nameField.getText());
         playerLabel.setText("0");
         opponentLabel.setText("0");
         buttonPanel.removeAll();
@@ -109,11 +99,10 @@ public class ClientHandler {
         categoryText.setText("");
         int opponentScore = gameUpdater.getOpponentScore();
         int clientScore = gameUpdater.getClientScore();
-        if(gameState == CLIENT_DISCONNECTED){
+        if (gameState == CLIENT_DISCONNECTED) {
             questionText.setText("Your opponent has left the game. YOU WIN!");
 
-        }
-        else if (clientScore > opponentScore) {
+        } else if (clientScore > opponentScore) {
             questionText.setText("You win this game! Great job!");
         } else if (clientScore < opponentScore) {
             questionText.setText("Better luck next time...");
@@ -145,6 +134,7 @@ public class ClientHandler {
         for (int i = 0; i < gameButtons.length; i++) {
             gameButtons[i].setText(answers.get(i));
             gameButtons[i].setBackground(UIManager.getColor("JButton.background"));
+            gameButtons[i].setBorder(UIManager.getBorder("Button.border"));
         }
         questionText.setText(question.questionText);
 
@@ -155,10 +145,12 @@ public class ClientHandler {
             gameUpdater.increaseClientScore();
             playerLabel.setText("" + gameUpdater.getClientScore());
         }
-        for (JButton button : gameButtons){
-            if (button.getText().equals(question.getCorrectAnswer()))
-                button.setBackground(Color.GREEN);
-            else button.setBackground(Color.RED);
+
+        for (int i = 0; i < gameButtons.length; i++) {
+            if (gameButtons[i].getText().equals(question.getCorrectAnswer()))
+                gameButtons[i].setBackground(Color.green);
+            else
+                gameButtons[i].setBackground(Color.red);
         }
 
 
@@ -178,19 +170,17 @@ public class ClientHandler {
                         System.out.println("Tar emot: " + input);
 
                         if (input instanceof GameUpdater) {
-                            switchToGameButtons();
                             gameUpdater = (GameUpdater) input;
 
-                            if (gameUpdater.getOpponentName() == null) {
+                            if (gameUpdater.getClientName() == null) {
                                 gameUpdater.setClientName(playerNameLabel.getText());
                                 sendToServer(gameUpdater);
                                 continue;
                             }
 
-                            if (!gameUpdater.getOpponentName().equals(opponentNameLabel.getText())){
-                                opponentNameLabel.setText(gameUpdater.getOpponentName());
-                            }
+                            switchToGameButtons();
 
+                            opponentNameLabel.setText(gameUpdater.getOpponentName());
                             opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
                             if (gameUpdater.getCategory() == null) {
                                 endTheGame(GAME_FINISHED);
@@ -201,8 +191,8 @@ public class ClientHandler {
                                 setCategoryText();
                                 updateQuestion();
                             }
-                        } else if (input instanceof String){
-                            if (input.toString().equals("Disconnected")){
+                        } else if (input instanceof String) {
+                            if (input.toString().equals("Disconnected")) {
                                 endTheGame(CLIENT_DISCONNECTED);
                             }
                         }
@@ -226,24 +216,24 @@ public class ClientHandler {
 
     }
 
-    private void socketIsClosed(Exception exception){
-        if (exception.getMessage().equals("Socket closed")){
+    private void socketIsClosed(Exception exception) {
+        if (exception.getMessage().equals("Socket closed")) {
             System.out.println("Disconnected");
         } else exception.printStackTrace();
     }
 
     private void sendToServer(Object output) {
 
-            sendToServerThread = new Thread(() -> {
-                try {
-                        outputStream.writeObject(output);
-                        System.out.println("Skickar: " + output.toString());
-                } catch (IOException e) {
-                    socketIsClosed(e);
-                }
-            });
+        sendToServerThread = new Thread(() -> {
+            try {
+                System.out.println("Skickar: " + output.toString());
+                outputStream.writeObject(output);
+            } catch (IOException e) {
+                socketIsClosed(e);
+            }
+        });
         if (socket != null)
-        sendToServerThread.start();
+            sendToServerThread.start();
     }
 
 }

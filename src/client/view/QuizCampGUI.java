@@ -3,6 +3,7 @@ package client.view;
 import client.controller.ClientHandler;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
@@ -38,18 +39,20 @@ public class QuizCampGUI extends JFrame {
     private JLabel playerLabel = new JLabel("0");
     private JLabel opponentLabel = new JLabel("0");
     private JLabel vsLabel = new JLabel(" VS ");
-    private JLabel playerNameLabel = new JLabel("Player");
-    private JLabel opponentNameLabel = new JLabel("Opponent");
+    private JLabel playerNameLabel = new JLabel("player");
+    private JLabel opponentNameLabel = new JLabel("opponent");
 
 
     public QuizCampGUI(){
         frame();
         ClientHandler clientHandler = new ClientHandler(this);
         startButton.addActionListener(e -> {
-            if (!nameField.getText().isEmpty()){
-                clientHandler.startButton();
-                clientHandler.connectToServer();
-            }
+           // if (nameField.getText().isEmpty())
+           //     return;
+            playerNameLabel.setText(nameField.getText());
+            clientHandler.connectToServer();
+            clientHandler.startButton();
+
         });
 
         ActionListener gameButtonListener = e -> {
@@ -58,6 +61,9 @@ public class QuizCampGUI extends JFrame {
                     return;
                 }
             }
+
+            Border border = BorderFactory.createLineBorder(Color.blue, 5);
+            ((JButton) e.getSource()).setBorder(border);
             clientHandler.checkAnswer(e.getActionCommand());
 
             nextButton.setVisible(true);
@@ -167,8 +173,8 @@ public class QuizCampGUI extends JFrame {
         return opponentLabel;
     }
 
-    public JTextField getNameField() {
-        return nameField;
+    public static void main(String[] args) {
+        new QuizCampGUI();
     }
 
     public JLabel getPlayerNameLabel() {
@@ -177,9 +183,5 @@ public class QuizCampGUI extends JFrame {
 
     public JLabel getOpponentNameLabel() {
         return opponentNameLabel;
-    }
-
-    public static void main(String[] args) {
-        new QuizCampGUI();
     }
 }

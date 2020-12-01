@@ -17,28 +17,29 @@ public class Pair {
     private ObjectOutputStream client2;
     private Game game = new Game(this);
 
-    public Pair(){}
+    public Pair() {
+    }
 
-    public void addClient(ObjectOutputStream client){
-        if (client1Exists() && client2Exists()){
+    public void addClient(ObjectOutputStream client) {
+        if (client1Exists() && client2Exists()) {
             System.out.println("Pair is full.");
             return;
         }
 
-        if (!client1Exists() && !client2Exists()){
+        if (!client1Exists() && !client2Exists()) {
             client1 = client;
-        } else if (client1Exists()){
+        } else if (client1Exists()) {
             client2 = client;
-        } else if (client2Exists()){
+        } else if (client2Exists()) {
             client1 = client;
         }
     }
 
-    public boolean readyToPlay(){
+    public boolean readyToPlay() {
         return client1Exists() && client2Exists();
     }
 
-    public void removeClient(ObjectOutputStream out){
+    public void removeClient(ObjectOutputStream out) {
         if (client1 == out) {
             client1 = null;
         } else {
@@ -46,11 +47,11 @@ public class Pair {
         }
     }
 
-    public boolean client1Exists(){
+    public boolean client1Exists() {
         return client1 != null;
     }
 
-    public boolean client2Exists(){
+    public boolean client2Exists() {
         return client2 != null;
     }
 
@@ -62,38 +63,44 @@ public class Pair {
         return client2;
     }
 
-    public void whenClientDisconnect(ObjectOutputStream out){
-            try {
-                if (out == client1 && client2Exists()){
-                    client2.writeObject("Disconnected");
-                } else if (out == client2 && client1Exists()) {
-                    client1.writeObject("Disconnected");
-                }
-
-            }catch (IOException e){
-                e.printStackTrace();
+    public void whenClientDisconnect(ObjectOutputStream out) {
+        try {
+            if (out == client1 && client2Exists()) {
+                client2.writeObject("Disconnected");
+            } else if (out == client2 && client1Exists()) {
+                client1.writeObject("Disconnected");
             }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    public void writeToClients(Object output){
+    public void writeToClients(Object output) {
         try {
             client1.writeObject(output);
             client2.writeObject(output);
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void writeGameUpdaters(Object output1,Object output2){
+    public void writeGameUpdaters(Object output1, Object output2) {
         try {
+            System.out.println("[SERVER] send to client1: " + output1.toString());
             client1.writeObject(output1);
+            client1.reset();
+
+            System.out.println("[SERVER] send to client2: " + output2.toString());
             client2.writeObject(output2);
-        }catch (IOException e){
+            client2.reset();
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
-    public Game getGame(){
+    public Game getGame() {
         return game;
     }
 }

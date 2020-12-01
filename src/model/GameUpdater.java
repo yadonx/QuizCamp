@@ -20,7 +20,6 @@ public class GameUpdater implements Serializable {
     public static final int CLIENT_1 = 1;
     public static final int CLIENT_2 = 2;
 
-
     public int getId() {
         return id;
     }
@@ -69,15 +68,15 @@ public class GameUpdater implements Serializable {
         return opponentName;
     }
 
-    public void setOpponentName(String opponentName) {
-        this.opponentName = opponentName;
+    public void setOpponentName(String name) {
+        opponentName = name;
     }
 
     public String getClientName() {
         return clientName;
     }
 
-    public void setClientName(String clientName) {
-        this.clientName = clientName;
+    public void setClientName(String name) {
+        clientName = name;
     }
 }
