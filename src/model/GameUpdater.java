@@ -20,7 +20,6 @@ public class GameUpdater implements Serializable {
     public static final int CLIENT_1 = 1;
     public static final int CLIENT_2 = 2;
 
-
     public int getId() {
         return id;
     }

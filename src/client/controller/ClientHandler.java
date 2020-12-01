@@ -26,12 +26,12 @@ import java.util.Scanner;
  */
 
 public class ClientHandler {
+    public static final int GAME_FINISHED = 1;
+    public static final int CLIENT_DISCONNECTED = 2;
     private int port = 12345;
     private String ip = "127.0.0.1";
     private Socket socket;
-
     private QuizCampGUI gui;
-
     private JPanel buttonPanel;
     private JButton[] gameButtons;
     private JButton startButton;
@@ -41,20 +41,13 @@ public class ClientHandler {
     private JLabel opponentLabel;
     private JLabel playerNameLabel;
     private JLabel opponentNameLabel;
-
     private ObjectOutputStream outputStream;
     private ObjectInputStream in;
-
     private Thread sendToServerThread;
     private Thread receiveFromServerThread;
-
     private CategoryProtocol protocol;
-
     private GameUpdater gameUpdater;
     private Question question;
-
-    public static final int GAME_FINISHED = 1;
-    public static final int CLIENT_DISCONNECTED = 2;
 
 
     public ClientHandler(QuizCampGUI gui) {
@@ -106,11 +99,10 @@ public class ClientHandler {
         categoryText.setText("");
         int opponentScore = gameUpdater.getOpponentScore();
         int clientScore = gameUpdater.getClientScore();
-        if(gameState == CLIENT_DISCONNECTED){
+        if (gameState == CLIENT_DISCONNECTED) {
             questionText.setText("Your opponent has left the game. YOU WIN!");
 
-        }
-        else if (clientScore > opponentScore) {
+        } else if (clientScore > opponentScore) {
             questionText.setText("You win this game! Great job!");
         } else if (clientScore < opponentScore) {
             questionText.setText("Better luck next time...");
@@ -172,18 +164,7 @@ public class ClientHandler {
                 try {
                     in = new ObjectInputStream(socket.getInputStream());
                     Object input;
-/*
-                    while (true) {
-                        input = in.readObject();
-                        gameUpdater = (GameUpdater) input;
 
-                        if (gameUpdater.getClientName() == null ){
-                            gameUpdater.setClientName(playerNameLabel.getText());
-                            sendToServer(gameUpdater);
-                            break;
-                        }
-                    }
-*/
                     while (true) {
                         input = in.readObject();
                         System.out.println("Tar emot: " + input);
@@ -191,7 +172,7 @@ public class ClientHandler {
                         if (input instanceof GameUpdater) {
                             gameUpdater = (GameUpdater) input;
 
-                            if (gameUpdater.getClientName() == null ){
+                            if (gameUpdater.getClientName() == null) {
                                 gameUpdater.setClientName(playerNameLabel.getText());
                                 sendToServer(gameUpdater);
                                 continue;
@@ -210,8 +191,8 @@ public class ClientHandler {
                                 setCategoryText();
                                 updateQuestion();
                             }
-                        } else if (input instanceof String){
-                            if (input.toString().equals("Disconnected")){
+                        } else if (input instanceof String) {
+                            if (input.toString().equals("Disconnected")) {
                                 endTheGame(CLIENT_DISCONNECTED);
                             }
                         }
@@ -235,24 +216,24 @@ public class ClientHandler {
 
     }
 
-    private void socketIsClosed(Exception exception){
-        if (exception.getMessage().equals("Socket closed")){
+    private void socketIsClosed(Exception exception) {
+        if (exception.getMessage().equals("Socket closed")) {
             System.out.println("Disconnected");
         } else exception.printStackTrace();
     }
 
     private void sendToServer(Object output) {
 
-            sendToServerThread = new Thread(() -> {
-                try {
-                        outputStream.writeObject(output);
-                        System.out.println("Skickar: " + output.toString());
-                } catch (IOException e) {
-                    socketIsClosed(e);
-                }
-            });
+        sendToServerThread = new Thread(() -> {
+            try {
+                System.out.println("Skickar: " + output.toString());
+                outputStream.writeObject(output);
+            } catch (IOException e) {
+                socketIsClosed(e);
+            }
+        });
         if (socket != null)
-        sendToServerThread.start();
+            sendToServerThread.start();
     }
 
 }

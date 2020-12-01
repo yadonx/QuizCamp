@@ -17,7 +17,6 @@ public class Game {
     private GameUpdater updater2 = new GameUpdater();
     private GameProtocol protocol = new GameProtocol();
 
-
     public Game(Pair pair) {
         this.pair = pair;
         updater1.setId(GameUpdater.CLIENT_1);
@@ -31,12 +30,14 @@ public class Game {
             pair.writeToClients(input);
         } else if (input instanceof GameUpdater) {
             if (((GameUpdater) input).getId() == GameUpdater.CLIENT_1) {
+                System.out.println("[SERVER] receives from client1: " + input.toString());
                 updater1 = (GameUpdater) input;
                 if (clientName1 == null) {
                     clientName1 = updater1.getClientName();
                 }
                 updater1.setReady(true);
             } else if (((GameUpdater) input).getId() == GameUpdater.CLIENT_2) {
+                System.out.println("[SERVER] receives from client2: " + input.toString());
                 updater2 = (GameUpdater) input;
                 if (clientName2 == null) {
                     clientName2 = updater2.getClientName();
@@ -71,6 +72,5 @@ public class Game {
         updater2.setReady(false);
         updateCategories();
         pair.writeGameUpdaters(updater1, updater2);
-
     }
 }

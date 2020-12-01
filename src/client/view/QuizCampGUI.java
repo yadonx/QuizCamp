@@ -47,11 +47,12 @@ public class QuizCampGUI extends JFrame {
         frame();
         ClientHandler clientHandler = new ClientHandler(this);
         startButton.addActionListener(e -> {
-            if (nameField.getText().isEmpty())
-                return;
-            clientHandler.startButton();
-            clientHandler.connectToServer();
+           // if (nameField.getText().isEmpty())
+           //     return;
             playerNameLabel.setText(nameField.getText());
+            clientHandler.connectToServer();
+            clientHandler.startButton();
+
         });
 
         ActionListener gameButtonListener = e -> {
