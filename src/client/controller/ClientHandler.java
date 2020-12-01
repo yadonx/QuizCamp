@@ -55,6 +55,7 @@ public class ClientHandler {
 
     public static final int GAME_FINISHED = 1;
     public static final int CLIENT_DISCONNECTED = 2;
+    public static final int SERVER_DISCONNECTED = 3;
 
 
     public ClientHandler(QuizCampGUI gui) {
@@ -108,9 +109,9 @@ public class ClientHandler {
         int clientScore = gameUpdater.getClientScore();
         if(gameState == CLIENT_DISCONNECTED){
             questionText.setText("Your opponent has left the game. YOU WIN!");
-
-        }
-        else if (clientScore > opponentScore) {
+        } else if (gameState == SERVER_DISCONNECTED){
+            questionText.setText("Disconnected from server");
+        } else if (clientScore > opponentScore) {
             questionText.setText("You win this game! Great job!");
         } else if (clientScore < opponentScore) {
             questionText.setText("Better luck next time...");
@@ -175,6 +176,7 @@ public class ClientHandler {
 
                     while (true) {
                         input = in.readObject();
+                        System.out.println("Tar emot: " + input);
                         gameUpdater = (GameUpdater) input;
 
                         if (gameUpdater.getClientName() == null ){
@@ -231,7 +233,10 @@ public class ClientHandler {
     private void socketIsClosed(Exception exception){
         if (exception.getMessage().equals("Socket closed")){
             System.out.println("Disconnected");
-        } else exception.printStackTrace();
+        }else if (exception.getMessage().equals("Connection reset")){
+            endTheGame(SERVER_DISCONNECTED);
+        }
+        else exception.printStackTrace();
     }
 
     private void sendToServer(Object output) {
