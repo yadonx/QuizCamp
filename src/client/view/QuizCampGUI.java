@@ -58,10 +58,7 @@ public class QuizCampGUI extends JFrame {
                     return;
                 }
             }
-            if (clientHandler.checkAnswer(e.getActionCommand()))
-                ((JButton) e.getSource()).setBackground(Color.green);
-            else
-                ((JButton) e.getSource()).setBackground(Color.red);
+            clientHandler.checkAnswer(e.getActionCommand());
 
             nextButton.setVisible(true);
         };

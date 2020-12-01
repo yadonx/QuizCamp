@@ -150,13 +150,18 @@ public class ClientHandler {
 
     }
 
-    public boolean checkAnswer(String input) {
+    public void checkAnswer(String input) {
         if (input.equalsIgnoreCase(question.getCorrectAnswer())) {
             gameUpdater.increaseClientScore();
             playerLabel.setText("" + gameUpdater.getClientScore());
-            return true;
-        } else
-            return false;
+        }
+        for (JButton button : gameButtons){
+            if (button.getText().equals(question.getCorrectAnswer()))
+                button.setBackground(Color.GREEN);
+            else button.setBackground(Color.RED);
+        }
+
+
     }
 
     public void connectToServer() {
