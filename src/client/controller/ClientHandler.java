@@ -26,12 +26,12 @@ import java.util.Scanner;
  */
 
 public class ClientHandler {
+    public static final int GAME_FINISHED = 1;
+    public static final int CLIENT_DISCONNECTED = 2;
     private int port = 12345;
     private String ip = "127.0.0.1";
     private Socket socket;
-
     private QuizCampGUI gui;
-
     private JPanel buttonPanel;
     private JButton[] gameButtons;
     private JButton startButton;
@@ -41,21 +41,13 @@ public class ClientHandler {
     private JLabel opponentLabel;
     private JLabel playerNameLabel;
     private JLabel opponentNameLabel;
-
     private ObjectOutputStream outputStream;
     private ObjectInputStream in;
-
     private Thread sendToServerThread;
     private Thread receiveFromServerThread;
-
     private CategoryProtocol protocol;
-
     private GameUpdater gameUpdater;
     private Question question;
-
-    public static final int GAME_FINISHED = 1;
-    public static final int CLIENT_DISCONNECTED = 2;
-    public static final int SERVER_DISCONNECTED = 3;
 
 
     public ClientHandler(QuizCampGUI gui) {
@@ -107,10 +99,9 @@ public class ClientHandler {
         categoryText.setText("");
         int opponentScore = gameUpdater.getOpponentScore();
         int clientScore = gameUpdater.getClientScore();
-        if(gameState == CLIENT_DISCONNECTED){
+        if (gameState == CLIENT_DISCONNECTED) {
             questionText.setText("Your opponent has left the game. YOU WIN!");
-        } else if (gameState == SERVER_DISCONNECTED){
-            questionText.setText("Disconnected from server");
+
         } else if (clientScore > opponentScore) {
             questionText.setText("You win this game! Great job!");
         } else if (clientScore < opponentScore) {
@@ -177,23 +168,18 @@ public class ClientHandler {
                     while (true) {
                         input = in.readObject();
                         System.out.println("Tar emot: " + input);
-                        gameUpdater = (GameUpdater) input;
-
-                        if (gameUpdater.getClientName() == null ){
-                            gameUpdater.setClientName(playerNameLabel.getText());
-                            sendToServer(gameUpdater);
-                            break;
-                        }
-
-                    }
-
-                    while (true) {
-                        input = in.readObject();
-                        System.out.println("Tar emot: " + input);
 
                         if (input instanceof GameUpdater) {
-                            switchToGameButtons();
                             gameUpdater = (GameUpdater) input;
+
+                            if (gameUpdater.getClientName() == null) {
+                                gameUpdater.setClientName(playerNameLabel.getText());
+                                sendToServer(gameUpdater);
+                                continue;
+                            }
+
+                            switchToGameButtons();
+
                             opponentNameLabel.setText(gameUpdater.getOpponentName());
                             opponentLabel.setText(String.valueOf(gameUpdater.getOpponentScore()));
                             if (gameUpdater.getCategory() == null) {
@@ -205,8 +191,8 @@ public class ClientHandler {
                                 setCategoryText();
                                 updateQuestion();
                             }
-                        } else if (input instanceof String){
-                            if (input.toString().equals("Disconnected")){
+                        } else if (input instanceof String) {
+                            if (input.toString().equals("Disconnected")) {
                                 endTheGame(CLIENT_DISCONNECTED);
                             }
                         }
@@ -230,29 +216,24 @@ public class ClientHandler {
 
     }
 
-    private void socketIsClosed(Exception exception){
-        if (exception.getMessage().equals("Socket closed")){
+    private void socketIsClosed(Exception exception) {
+        if (exception.getMessage().equals("Socket closed")) {
             System.out.println("Disconnected");
-        }else if (exception.getMessage().equals("Connection reset")){
-            endTheGame(SERVER_DISCONNECTED);
-        }
-        else exception.printStackTrace();
+        } else exception.printStackTrace();
     }
 
     private void sendToServer(Object output) {
 
-            sendToServerThread = new Thread(() -> {
-                try {
-                    outputStream.reset();
-                        outputStream.writeObject(output);
-                        outputStream.flush();
-                        System.out.println("Skickar: " + output.toString());
-                } catch (IOException e) {
-                    socketIsClosed(e);
-                }
-            });
+        sendToServerThread = new Thread(() -> {
+            try {
+                System.out.println("Skickar: " + output.toString());
+                outputStream.writeObject(output);
+            } catch (IOException e) {
+                socketIsClosed(e);
+            }
+        });
         if (socket != null)
-        sendToServerThread.start();
+            sendToServerThread.start();
     }
 
 }
