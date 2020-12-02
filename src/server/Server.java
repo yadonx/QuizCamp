@@ -56,14 +56,15 @@ public class Server extends Thread {
 
             }
         } catch (SocketException e){
-            if (e.getMessage().equals("Connection reset"))
-            System.out.println("Client disconnected");
+            if (e.getMessage().equals("Connection reset")) {
+                System.out.println("Client disconnected");
+                pair.whenClientDisconnect(out);
+            }
             else e.printStackTrace();
         } catch (Exception e) {
             System.out.println("End of Thread: " + e.getMessage());
         }
         finally {
-            pair.whenClientDisconnect(out);
             pair.removeClient(out);
         }
 
