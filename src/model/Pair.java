@@ -21,17 +21,12 @@ public class Pair {
     }
 
     public void addClient(ObjectOutputStream client) {
-        if (client1Exists() && client2Exists()) {
-            System.out.println("Pair is full.");
-            return;
-        }
-
-        if (!client1Exists() && !client2Exists()) {
+        if (!client1Exists()) {
             client1 = client;
-        } else if (client1Exists()) {
+        } else if (!client2Exists()) {
             client2 = client;
-        } else if (client2Exists()) {
-            client1 = client;
+        } else {
+            System.out.println("Pair is full.");
         }
     }
 
@@ -53,14 +48,6 @@ public class Pair {
 
     public boolean client2Exists() {
         return client2 != null;
-    }
-
-    public ObjectOutputStream getClient1() {
-        return client1;
-    }
-
-    public ObjectOutputStream getClient2() {
-        return client2;
     }
 
     public void whenClientDisconnect(ObjectOutputStream out) {
