@@ -3,9 +3,6 @@ package server;
 
 import model.Pair;
 
-import javax.xml.crypto.dsig.spec.ExcC14NParameterSpec;
-import java.io.EOFException;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
