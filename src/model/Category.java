@@ -20,7 +20,6 @@ public class Category implements Serializable {
 
     public void getShuffledQuestions(int amount){
         List<Question> tempList = new ArrayList<>(questionList);
-        //tempList.remove(0);                                         //TODO vet inte vad det här är hehe // viktor
         Collections.shuffle(tempList);
         List<Question> outList = new ArrayList<>();
         for (int i = 0; i < amount; i++){

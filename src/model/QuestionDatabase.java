@@ -67,7 +67,6 @@ public class QuestionDatabase implements Serializable {
 
     public List<Category> getShuffledCategories(int amount){
         List<Category> tempList = new ArrayList<>(categoryList);
-//        tempList.remove(0);
         Collections.shuffle(tempList);
         List<Category> outList = new ArrayList<>();
         for (int i = 0; i < amount; i++){

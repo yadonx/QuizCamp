@@ -23,7 +23,6 @@ public class CategoryProtocol {
 
     public Question getQuestion(){
         if(questionList.size() <= currentQuestion){
-//            currentQuestion = 0;
             return null;
         }
         Question question = questionList.get(currentQuestion);

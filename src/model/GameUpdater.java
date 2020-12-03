@@ -32,10 +32,6 @@ public class GameUpdater implements Serializable {
         return clientScore;
     }
 
-    public void setClientScore(int clientScore) {
-        this.clientScore = clientScore;
-    }
-
     public int getOpponentScore() {
         return opponentScore;
     }
